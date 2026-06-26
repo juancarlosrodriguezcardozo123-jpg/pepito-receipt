@@ -1,0 +1,8 @@
+[phases.setup]
+nixPkgs = ["nodejs_18", "chromium", "nss", "freetype", "harfbuzz", "ca-certificates", "ttf-dejavu", "liberation_ttf", "fontconfig"]
+
+[phases.install]
+cmds = ["npm install"]
+
+[start]
+cmd = "node index.js"
