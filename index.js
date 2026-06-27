@@ -1,6 +1,4 @@
 const express = require('express');
-const { createCanvas } = require('canvas');
-
 const app = express();
 app.use(express.json());
 
@@ -23,234 +21,123 @@ app.post('/generar-recibo', async (req, res) => {
 
     const fecha = new Date().toLocaleDateString('es-CO', { day: 'numeric', month: 'long', year: 'numeric' });
     const hora = new Date().toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' });
+    const pedidoNum = String(numeroPedido).padStart(4, '0');
 
-    const W = 500;
     const productos = detalle_pedido.split(',').map(p => p.trim()).filter(Boolean);
-    const H = 780 + (productos.length * 32);
 
-    const canvas = createCanvas(W, H);
-    const ctx = canvas.getContext('2d');
+    const productosRows = productos.map((p, i) => `
+      <tr style="background:${i % 2 === 0 ? '#FFF8F0' : '#FFF3E8'}">
+        <td style="padding:10px 14px;font-size:13px;font-weight:700;color:#2C1810;border-bottom:1px solid #EDD9C0">${p}</td>
+      </tr>`).join('');
 
-    ctx.fillStyle = '#FDF6EE';
-    ctx.fillRect(0, 0, W, H);
+    const html = `<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+  body { margin: 0; padding: 20px; background: #1a1a1a; font-family: Arial, sans-serif; display: flex; justify-content: center; }
+  .receipt { width: 480px; background: #FDF6EE; border-radius: 24px; overflow: hidden; }
+  .top-bar { background: #E07B1A; height: 8px; }
+  .header { text-align: center; padding: 24px 20px 16px; }
+  .logo { width: 80px; height: 80px; background: linear-gradient(135deg, #F4A23C, #E07B1A); border-radius: 50%; margin: 0 auto 8px; display: flex; align-items: center; justify-content: center; font-size: 36px; }
+  .brand { font-size: 26px; font-weight: 900; color: #2C1810; letter-spacing: 1px; }
+  .brand-sub { font-size: 11px; font-weight: 700; color: #8B5E3C; letter-spacing: 3px; margin-top: 2px; }
+  .title { font-size: 19px; font-weight: 800; color: #2C1810; margin-top: 12px; }
+  .badge { display: inline-block; background: #E8F7EE; color: #27AE60; font-size: 13px; font-weight: 700; padding: 5px 14px; border-radius: 20px; margin-top: 6px; border: 1.5px solid #A8E6C0; }
+  .divider { border: none; border-top: 2px dashed #D4B896; margin: 12px 20px; }
+  .order-box { background: #FFF8F0; margin: 0 16px; border-radius: 12px; padding: 12px 16px; border: 1.5px solid #EDD9C0; display: flex; justify-content: space-between; align-items: flex-start; }
+  .order-num { font-size: 22px; font-weight: 900; color: #E07B1A; }
+  .order-label { font-size: 12px; font-weight: 700; color: #8B5E3C; margin-bottom: 4px; }
+  .date-time { text-align: right; font-size: 11px; color: #8B5E3C; font-weight: 600; line-height: 1.6; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 10px 16px; }
+  .card { background: #FFF8F0; border-radius: 10px; padding: 10px 12px; border: 1.5px solid #EDD9C0; }
+  .card-label { font-size: 10px; font-weight: 700; color: #8B5E3C; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 3px; }
+  .card-value { font-size: 13px; font-weight: 700; color: #2C1810; word-break: break-word; }
+  .table-wrap { margin: 0 16px 10px; border-radius: 10px; overflow: hidden; }
+  .table-head { background: #E07B1A; color: white; font-size: 12px; font-weight: 800; padding: 10px 14px; text-transform: uppercase; }
+  .total-bar { background: #2C1810; margin: 0 16px; border-radius: 10px; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; }
+  .total-label { font-size: 16px; font-weight: 900; color: white; }
+  .total-value { font-size: 18px; font-weight: 900; color: #F4A23C; }
+  .status-box { background: #FFF8F0; margin: 10px 16px; border-radius: 12px; padding: 14px; border: 1.5px solid #EDD9C0; }
+  .status-title { font-size: 11px; font-weight: 800; color: #8B5E3C; text-transform: uppercase; letter-spacing: 1px; text-align: center; margin-bottom: 14px; }
+  .steps { display: flex; justify-content: space-between; align-items: flex-start; }
+  .step { display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; }
+  .step-dot { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; }
+  .step-dot.active { background: #E07B1A; color: white; }
+  .step-dot.inactive { background: #EDD9C0; color: #8B5E3C; }
+  .step-line { flex: 1; height: 2px; background: #EDD9C0; margin-top: 14px; }
+  .step-label { font-size: 8px; font-weight: 700; color: #8B5E3C; text-align: center; max-width: 52px; }
+  .step-label.active { color: #E07B1A; }
+  .tiempo { background: #FFF0DC; border: 1.5px solid #F4A23C; border-radius: 20px; padding: 7px 14px; text-align: center; margin-top: 12px; font-size: 12px; color: #8B5E3C; font-weight: 600; }
+  .tiempo span { font-weight: 900; color: #E07B1A; }
+  .thanks { text-align: center; padding: 10px 20px 6px; font-size: 15px; font-weight: 800; color: #2C1810; }
+  .footer { background: #2C1810; padding: 12px 20px; text-align: center; font-size: 11px; color: #D4B896; font-weight: 600; }
+  .bottom-bar { background: #E07B1A; height: 6px; }
+  table { width: 100%; border-collapse: collapse; }
+</style>
+</head>
+<body>
+<div class="receipt">
+  <div class="top-bar"></div>
+  <div class="header">
+    <div class="logo">&#128104;&#8205;&#127859;</div>
+    <div class="brand">PEPITO</div>
+    <div class="brand-sub">RESTAURANTE</div>
+    <div class="title">Comprobante de Pedido</div>
+    <div class="badge">&#10003; Pedido confirmado!</div>
+  </div>
+  <hr class="divider">
+  <div class="order-box">
+    <div>
+      <div class="order-label">Pedido</div>
+      <div class="order-num">#${pedidoNum}</div>
+    </div>
+    <div class="date-time">${fecha}<br>${hora}</div>
+  </div>
+  <div class="grid">
+    <div class="card"><div class="card-label">Cliente</div><div class="card-value">${cliente}</div></div>
+    <div class="card"><div class="card-label">Telefono</div><div class="card-value">${telefono}</div></div>
+    <div class="card"><div class="card-label">Tipo entrega</div><div class="card-value">${tipoEntrega}</div></div>
+    <div class="card"><div class="card-label">Direccion</div><div class="card-value">${direccion || '-'}</div></div>
+  </div>
+  <div class="table-wrap">
+    <div class="table-head">Detalle del pedido</div>
+    <table>${productosRows}</table>
+  </div>
+  <div class="total-bar">
+    <span class="total-label">TOTAL</span>
+    <span class="total-value">${total}</span>
+  </div>
+  <div class="status-box">
+    <div class="status-title">Estado del pedido</div>
+    <div class="steps">
+      <div class="step"><div class="step-dot active">&#10003;</div><div class="step-label active">Confirmado</div></div>
+      <div class="step-line"></div>
+      <div class="step"><div class="step-dot inactive">2</div><div class="step-label">Preparando</div></div>
+      <div class="step-line"></div>
+      <div class="step"><div class="step-dot inactive">3</div><div class="step-label">Listo</div></div>
+      <div class="step-line"></div>
+      <div class="step"><div class="step-dot inactive">4</div><div class="step-label">En camino</div></div>
+      <div class="step-line"></div>
+      <div class="step"><div class="step-dot inactive">5</div><div class="step-label">Entregado</div></div>
+    </div>
+    <div class="tiempo">Tiempo estimado: <span>${tiempoEstimado}</span></div>
+  </div>
+  <div class="thanks">Gracias por elegir Pepito! &#9829;</div>
+  <div class="footer">300 123 4567 | @pepito.restaurante | Te esperamos!</div>
+  <div class="bottom-bar"></div>
+</div>
+</body>
+</html>`;
 
-    ctx.fillStyle = '#E07B1A';
-    ctx.fillRect(0, 0, W, 8);
-
-    ctx.fillStyle = '#E07B1A';
-    ctx.beginPath();
-    ctx.arc(250, 70, 45, 0, Math.PI * 2);
-    ctx.fill();
-
-    ctx.fillStyle = '#2C1810';
-    ctx.font = 'bold 28px Arial';
-    ctx.textAlign = 'center';
-    ctx.fillText('PEPITO', 250, 135);
-
-    ctx.fillStyle = '#8B5E3C';
-    ctx.font = '12px Arial';
-    ctx.fillText('RESTAURANTE', 250, 152);
-
-    ctx.fillStyle = '#2C1810';
-    ctx.font = 'bold 20px Arial';
-    ctx.fillText('Comprobante de Pedido', 250, 185);
-
-    ctx.fillStyle = '#27AE60';
-    ctx.font = 'bold 13px Arial';
-    ctx.fillText('Pedido confirmado!', 250, 212);
-
-    ctx.setLineDash([6, 4]);
-    ctx.strokeStyle = '#D4B896';
-    ctx.lineWidth = 1.5;
-    ctx.beginPath();
-    ctx.moveTo(20, 235);
-    ctx.lineTo(480, 235);
-    ctx.stroke();
-    ctx.setLineDash([]);
-
-    ctx.fillStyle = '#FFF8F0';
-    roundRect(ctx, 16, 245, 468, 65, 12);
-    ctx.fill();
-    ctx.strokeStyle = '#EDD9C0';
-    ctx.lineWidth = 1.5;
-    roundRect(ctx, 16, 245, 468, 65, 12);
-    ctx.stroke();
-
-    ctx.fillStyle = '#8B5E3C';
-    ctx.font = 'bold 13px Arial';
-    ctx.textAlign = 'left';
-    ctx.fillText('Pedido', 28, 265);
-
-    ctx.fillStyle = '#E07B1A';
-    ctx.font = 'bold 22px Arial';
-    ctx.fillText('#' + String(numeroPedido).padStart(4, '0'), 28, 295);
-
-    ctx.fillStyle = '#8B5E3C';
-    ctx.font = '12px Arial';
-    ctx.textAlign = 'right';
-    ctx.fillText(fecha, 484, 265);
-    ctx.fillText(hora, 484, 282);
-
-    let y = 325;
-    const cards = [
-      { label: 'Cliente', value: cliente },
-      { label: 'Telefono', value: telefono },
-      { label: 'Tipo entrega', value: tipoEntrega },
-      { label: 'Direccion', value: direccion || '-' },
-    ];
-
-    for (let i = 0; i < cards.length; i++) {
-      const col = i % 2;
-      const row = Math.floor(i / 2);
-      const x = col === 0 ? 16 : 256;
-      const cy = y + row * 75;
-
-      ctx.fillStyle = '#FFF8F0';
-      roundRect(ctx, x, cy, 228, 60, 10);
-      ctx.fill();
-      ctx.strokeStyle = '#EDD9C0';
-      ctx.lineWidth = 1.5;
-      roundRect(ctx, x, cy, 228, 60, 10);
-      ctx.stroke();
-
-      ctx.fillStyle = '#8B5E3C';
-      ctx.font = 'bold 10px Arial';
-      ctx.textAlign = 'left';
-      ctx.fillText(cards[i].label, x + 12, cy + 18);
-
-      ctx.fillStyle = '#2C1810';
-      ctx.font = 'bold 13px Arial';
-      let val = cards[i].value;
-      if (ctx.measureText(val).width > 200) val = val.substring(0, 22) + '...';
-      ctx.fillText(val, x + 12, cy + 40);
-    }
-
-    y = y + 165;
-
-    ctx.fillStyle = '#E07B1A';
-    ctx.fillRect(16, y, 468, 36);
-
-    ctx.fillStyle = 'white';
-    ctx.font = 'bold 12px Arial';
-    ctx.textAlign = 'left';
-    ctx.fillText('DETALLE DEL PEDIDO', 28, y + 23);
-
-    y += 36;
-
-    productos.forEach((p, i) => {
-      ctx.fillStyle = i % 2 === 0 ? '#FFF8F0' : '#FFF3E8';
-      ctx.fillRect(16, y, 468, 32);
-      ctx.strokeStyle = '#EDD9C0';
-      ctx.lineWidth = 1;
-      ctx.strokeRect(16, y, 468, 32);
-
-      ctx.fillStyle = '#2C1810';
-      ctx.font = 'bold 13px Arial';
-      ctx.textAlign = 'left';
-      ctx.fillText(p, 28, y + 21);
-      y += 32;
-    });
-
-    ctx.fillStyle = '#2C1810';
-    ctx.fillRect(16, y, 468, 44);
-
-    ctx.fillStyle = 'white';
-    ctx.font = 'bold 16px Arial';
-    ctx.textAlign = 'left';
-    ctx.fillText('TOTAL', 28, y + 28);
-
-    ctx.fillStyle = '#F4A23C';
-    ctx.font = 'bold 18px Arial';
-    ctx.textAlign = 'right';
-    ctx.fillText(total, 484, y + 28);
-
-    y += 60;
-
-    ctx.fillStyle = '#FFF8F0';
-    roundRect(ctx, 16, y, 468, 90, 12);
-    ctx.fill();
-    ctx.strokeStyle = '#EDD9C0';
-    ctx.lineWidth = 1.5;
-    roundRect(ctx, 16, y, 468, 90, 12);
-    ctx.stroke();
-
-    ctx.fillStyle = '#8B5E3C';
-    ctx.font = 'bold 11px Arial';
-    ctx.textAlign = 'center';
-    ctx.fillText('ESTADO DEL PEDIDO', 250, y + 18);
-
-    const steps = ['Confirmado', 'Preparando', 'Listo', 'En camino', 'Entregado'];
-    const stepX = [60, 140, 220, 310, 420];
-
-    ctx.strokeStyle = '#EDD9C0';
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.moveTo(60, y + 45);
-    ctx.lineTo(420, y + 45);
-    ctx.stroke();
-
-    steps.forEach((s, i) => {
-      const sx = stepX[i];
-      ctx.fillStyle = i === 0 ? '#E07B1A' : '#EDD9C0';
-      ctx.beginPath();
-      ctx.arc(sx, y + 45, 12, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.fillStyle = i === 0 ? 'white' : '#8B5E3C';
-      ctx.font = 'bold 8px Arial';
-      ctx.textAlign = 'center';
-      ctx.fillText(s, sx, y + 72);
-    });
-
-    y += 105;
-
-    ctx.fillStyle = '#8B5E3C';
-    ctx.font = '12px Arial';
-    ctx.textAlign = 'center';
-    ctx.fillText('Tiempo estimado: ' + tiempoEstimado, 250, y + 20);
-
-    y += 45;
-
-    ctx.fillStyle = '#2C1810';
-    ctx.font = 'bold 15px Arial';
-    ctx.textAlign = 'center';
-    ctx.fillText('Gracias por elegir Pepito!', 250, y + 15);
-
-    y += 30;
-
-    ctx.fillStyle = '#2C1810';
-    ctx.fillRect(0, y, W, 40);
-
-    ctx.fillStyle = '#D4B896';
-    ctx.font = '11px Arial';
-    ctx.textAlign = 'center';
-    ctx.fillText('300 123 4567  |  @pepito.restaurante', 250, y + 25);
-
-    ctx.fillStyle = '#E07B1A';
-    ctx.fillRect(0, y + 40, W, 6);
-
-    const buffer = canvas.toBuffer('image/png');
-    res.set('Content-Type', 'image/png');
-    res.send(buffer);
+    res.set('Content-Type', 'text/html');
+    res.send(html);
 
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: error.message });
   }
 });
-
-function roundRect(ctx, x, y, w, h, r) {
-  ctx.beginPath();
-  ctx.moveTo(x + r, y);
-  ctx.lineTo(x + w - r, y);
-  ctx.quadraticCurveTo(x + w, y, x + w, y + r);
-  ctx.lineTo(x + w, y + h - r);
-  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
-  ctx.lineTo(x + r, y + h);
-  ctx.quadraticCurveTo(x, y + h, x, y + h - r);
-  ctx.lineTo(x, y + r);
-  ctx.quadraticCurveTo(x, y, x + r, y);
-  ctx.closePath();
-}
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log('Pepito Receipt Generator corriendo en puerto ' + PORT));
