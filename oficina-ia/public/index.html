@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Oficina IA</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">🏢 <strong>Oficina IA</strong> <span id="modo" class="pill"></span></div>
+    <div class="acciones">
+      <button id="btnReunion" class="btn primario">🎯 Nuevo proyecto</button>
+      <button id="btnJornada" class="btn">⚡ Jornada de trabajo</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="oficina" id="contenedorOficina">
+      <canvas id="oficina"></canvas>
+      <div class="ayuda">Haz clic en una persona para hablar con ella</div>
+    </section>
+
+    <aside class="panel">
+      <nav class="tabs">
+        <button data-tab="chat" class="tab activo">💬 Chat</button>
+        <button data-tab="tablero" class="tab">📋 Tablero</button>
+        <button data-tab="equipo" class="tab">👥 Equipo</button>
+      </nav>
+
+      <div id="tab-chat" class="tab-cuerpo activo">
+        <div id="chatVacio" class="vacio">
+          <p>👋 Selecciona a alguien del equipo en la oficina o en la pestaña <b>Equipo</b> para conversar.</p>
+        </div>
+        <div id="chatActivo" class="oculto">
+          <div class="chat-cabecera">
+            <div class="avatar" id="chatAvatar"></div>
+            <div class="chat-info">
+              <div id="chatNombre" class="nombre"></div>
+              <div id="chatRol" class="rol"></div>
+            </div>
+            <div class="chat-botones">
+              <button id="btnTrabajar" class="btn chico" title="Trabajar en su siguiente tarea">▶️ Trabajar</button>
+              <button id="btnReiniciar" class="btn chico fantasma" title="Borrar conversación">🗑️</button>
+            </div>
+          </div>
+          <div id="mensajes" class="mensajes"></div>
+          <form id="formChat" class="form-chat">
+            <textarea id="inputChat" rows="2" placeholder="Escribe un mensaje… (Enter para enviar)"></textarea>
+            <button class="btn primario" type="submit">Enviar</button>
+          </form>
+        </div>
+      </div>
+
+      <div id="tab-tablero" class="tab-cuerpo">
+        <form id="formTarea" class="form-tarea">
+          <input id="tareaTitulo" placeholder="Nueva tarea…" required>
+          <select id="tareaAsignado"></select>
+          <select id="tareaPrioridad">
+            <option value="alta">Alta</option>
+            <option value="media" selected>Media</option>
+            <option value="baja">Baja</option>
+          </select>
+          <button class="btn primario chico" type="submit">+</button>
+        </form>
+        <div id="tablero" class="tablero"></div>
+      </div>
+
+      <div id="tab-equipo" class="tab-cuerpo">
+        <div id="equipo" class="equipo"></div>
+      </div>
+    </aside>
+  </main>
+
+  <dialog id="dlgReunion">
+    <form method="dialog" id="formReunion">
+      <h3>🎯 Reunión estratégica</h3>
+      <p>Describe el software que quieres construir. Sofía reunirá al equipo, hará el plan y repartirá las tareas.</p>
+      <textarea id="reunionObjetivo" rows="4" placeholder="Ej: Una app web para que los clientes de mi restaurante hagan pedidos y paguen en línea"></textarea>
+      <div class="dlg-botones">
+        <button value="cancel" class="btn fantasma" formnovalidate>Cancelar</button>
+        <button value="ok" class="btn primario">Convocar reunión</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="dlgTarea">
+    <div id="detalleTarea"></div>
+    <form method="dialog" class="dlg-botones"><button class="btn">Cerrar</button></form>
+  </dialog>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="office.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

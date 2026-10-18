@@ -58,3 +58,9 @@ Genera la imagen PNG del recibo.
 - Si `tipoEntrega` no es "Domicilio", no se cobra costo de domicilio
 - `fecha` y `hora` se generan automáticamente si no se envían
 - `costodomicilio` por defecto es $4.000
+
+---
+
+## 🏢 Oficina IA
+
+En la carpeta [`oficina-ia/`](oficina-ia/README.md) hay una oficina virtual con agentes de IA que crean software y gestionan tareas.
