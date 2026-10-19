@@ -1,0 +1,1119 @@
+<title>Oficina Nodo Labs</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Layout: one column. Project brief on top, the open-plan office as the hero (desks in two rows, meeting room at the right, lounge in front), then ten hand-off cards in a two-column grid. Chat opens as a side sheet. */
+:root{
+  --bg:#F1F4F1; --surface:#FFFFFF; --sunk:#E4EBE7; --ink:#10202B; --muted:#55666E; --line:#D3DDD8;
+  --signal:#0E9F7E; --signal-ink:#FFFFFF; --amber:#F2A93B; --coral:#E8604F; --night:#16303C;
+  --is-dark:0;
+  --font-display:"Bricolage Grotesque","Avenir Next","Trebuchet MS",system-ui,sans-serif;
+  --font-body:"Instrument Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --font-mono:"JetBrains Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0D1519; --surface:#142027; --sunk:#1B2A31; --ink:#E5EEF0; --muted:#94A8B0; --line:#26363E;
+  --signal:#2DD4A7; --signal-ink:#0D1519; --amber:#F5B65A; --coral:#F07A69; --night:#0A1216;
+  --is-dark:1; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0D1519; --surface:#142027; --sunk:#1B2A31; --ink:#E5EEF0; --muted:#94A8B0; --line:#26363E;
+  --signal:#2DD4A7; --signal-ink:#0D1519; --amber:#F5B65A; --coral:#F07A69; --night:#0A1216;
+  --is-dark:1; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:15px;line-height:1.5}
+.wrap{max-width:1240px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:22px 60px;display:grid;gap:22px}
+.wrap>*{min-width:0}
+h1,h2,h3{font-family:var(--font-display);font-weight:800;text-wrap:balance;margin:0;line-height:1.02;letter-spacing:-.02em}
+h1{font-size:clamp(32px,5.6vw,54px)}
+h2{font-size:26px}
+p{margin:0}
+.top{display:grid;gap:12px}
+.brandrow{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.mark{width:52px;height:52px;flex:none;border-radius:14px;background:var(--night);display:grid;place-items:center;position:relative;overflow:hidden}
+.mark i{position:absolute;width:10px;height:10px;border-radius:50%;background:var(--signal)}
+.mark i:nth-child(1){left:10px;top:12px}.mark i:nth-child(2){right:10px;top:21px;background:var(--amber)}.mark i:nth-child(3){left:18px;bottom:10px;background:var(--coral)}
+.mark svg{position:absolute;inset:0}
+.eyebrow{font-family:var(--font-mono);font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.lede{color:var(--muted);max-width:76ch;font-size:16px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips span{font-size:13px;background:var(--surface);border:1.5px solid var(--line);border-radius:999px;padding:4px 12px}
+.chips b{font-family:var(--font-mono);font-weight:700;font-size:12px}
+.brief{background:var(--surface);border:1.5px solid var(--line);border-radius:16px;padding:16px;display:grid;gap:12px;grid-template-columns:minmax(0,1fr)}
+.brief .row2{display:grid;gap:12px;grid-template-columns:minmax(0,220px) minmax(0,1fr)}
+@media (max-width:640px){.brief .row2{grid-template-columns:minmax(0,1fr)}}
+.field{display:grid;gap:6px;min-width:0}
+.field label{font-family:var(--font-mono);font-weight:700;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+input[type=text],textarea{width:100%;font:inherit;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:10px;padding:10px 12px}
+textarea{resize:vertical;min-height:84px}
+input:focus-visible,textarea:focus-visible,button:focus-visible,summary:focus-visible,.scene:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+.actions{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.btn{font:inherit;font-weight:700;border-radius:12px;padding:10px 20px;border:2px solid transparent;cursor:pointer;line-height:1.2}
+.btn.primary{background:var(--signal);color:var(--signal-ink);box-shadow:0 3px 0 var(--night)}
+.btn.primary:active{transform:translateY(2px);box-shadow:0 1px 0 var(--night)}
+.btn.primary:disabled{opacity:.5;cursor:default}
+.btn.danger{background:transparent;color:var(--coral);border-color:var(--coral)}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line);padding:6px 14px;font-size:13px;border-radius:10px}
+.status{color:var(--muted);font-size:14px;min-width:0;flex:1 1 280px}
+.note{font-size:13px;color:var(--muted);background:var(--sunk);border-radius:10px;padding:8px 12px}
+.scene{position:relative;width:100%;max-width:100%;overflow-x:auto;overflow-y:hidden;border-radius:18px;border:2px solid var(--ink);background:var(--night);box-shadow:0 8px 0 var(--line)}
+.scene canvas{display:block;width:100%;min-width:900px;aspect-ratio:1400/820;touch-action:pan-x pan-y}
+.scenehint{font-size:12.5px;color:var(--muted);margin-top:8px}
+.crew{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.crew button{display:flex;align-items:center;gap:8px;font:inherit;font-size:13px;background:var(--surface);color:var(--ink);border:1.5px solid var(--line);border-radius:999px;padding:5px 12px 5px 6px;cursor:pointer}
+.crew button b{font-weight:700}
+.crew button span.r{color:var(--muted)}
+.dot{width:18px;height:18px;border-radius:50%;flex:none;box-shadow:inset 0 -3px 0 rgba(0,0,0,.22)}
+.delivs{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(min(100%,480px),1fr));align-items:start}
+.deliv{background:var(--surface);border:1.5px solid var(--line);border-radius:14px;overflow:hidden;min-width:0}
+.deliv summary{list-style:none;display:flex;align-items:center;gap:12px;padding:12px 14px;cursor:pointer}
+.deliv summary::-webkit-details-marker{display:none}
+.deliv summary::after{content:"";width:9px;height:9px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(45deg);margin-left:4px;flex:none;transition:transform .2s}
+.deliv[open] summary::after{transform:rotate(225deg)}
+.num{font-family:var(--font-mono);font-size:12px;font-weight:700;color:var(--muted);width:22px;flex:none}
+.who{display:grid;min-width:0;flex:1}
+.who strong{font-weight:700}
+.who span{font-size:13px;color:var(--muted)}
+.chip{font-family:var(--font-mono);font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px;background:var(--sunk);color:var(--muted);white-space:nowrap;letter-spacing:.02em}
+.chip.example{background:var(--amber);color:#10202B}
+.chip.thinking,.chip.writing{background:var(--signal);color:var(--signal-ink)}
+.chip.done{background:var(--night);color:#E5EEF0}
+.chip.edited{background:var(--sunk);color:var(--ink);border:1.5px solid var(--signal)}
+.chip.error,.chip.stopped{background:transparent;color:var(--coral);border:1.5px solid var(--coral)}
+.dbody{padding:0 16px 14px 48px;display:grid;gap:10px}
+.md{min-width:0;overflow-wrap:anywhere}
+.md ul{margin:0;padding-left:18px;display:grid;gap:3px}
+.md p{margin:0 0 4px}
+.md .muted{color:var(--muted);font-style:italic}
+.dnote{font-size:13px;color:var(--coral)}
+.dacts{display:flex;gap:8px;flex-wrap:wrap}
+.chat{position:fixed;z-index:20;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));width:min(420px,calc(100vw - 32px));max-height:min(660px,calc(100vh - 32px));background:var(--surface);border:2px solid var(--ink);border-radius:18px;box-shadow:0 14px 40px rgba(0,0,0,.3);display:flex;flex-direction:column}
+.chat[hidden]{display:none}
+.chat header{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1.5px solid var(--line)}
+.chat header .dot{width:32px;height:32px}
+.chat header div{flex:1;min-width:0}
+.chat h3{font-size:22px}
+.chat header p{font-size:13px;color:var(--muted)}
+.xbtn{font:inherit;font-size:22px;line-height:1;background:transparent;border:0;color:var(--ink);cursor:pointer;width:36px;height:36px;border-radius:50%}
+.log{flex:1;overflow-y:auto;padding:12px 14px;display:flex;flex-direction:column;gap:8px;min-height:160px}
+.msg{max-width:88%;padding:8px 12px;border-radius:14px;font-size:14px;overflow-wrap:anywhere;white-space:pre-wrap}
+.msg.me{align-self:flex-end;background:var(--signal);color:var(--signal-ink);border-bottom-right-radius:4px}
+.msg.them{align-self:flex-start;background:var(--sunk);color:var(--ink);border-bottom-left-radius:4px}
+.msg.sys{align-self:center;background:transparent;color:var(--muted);font-size:12px;padding:2px}
+.msg em{color:var(--muted)}
+.chat form{display:grid;gap:8px;padding:10px 14px 14px;border-top:1.5px solid var(--line)}
+.chat form .row{display:flex;justify-content:flex-end;gap:8px}
+.chat textarea{min-height:50px}
+@media (max-width:560px){
+  .chat{right:0;left:0;bottom:0;width:100%;max-height:80vh;border-radius:18px 18px 0 0;border-bottom:0;padding-bottom:env(safe-area-inset-bottom,0px)}
+  .dbody{padding-left:16px}
+}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div class="brandrow">
+      <span class="mark" aria-hidden="true"><svg viewBox="0 0 52 52"><path d="M15 17 L38 26 L23 37" fill="none" stroke="#7FA3B3" stroke-width="2"/></svg><i></i><i></i><i></i></span>
+      <div>
+        <p class="eyebrow">Software y automatizaciones con IA</p>
+        <h1 id="brandTitle">La oficina de Nodo Labs</h1>
+      </div>
+    </div>
+    <p class="lede">Diez agentes de IA, uno por cargo, atienden cada proyecto en cadena. Ventas lo diagnostica, el equipo técnico lo planea y lo diseña, QA lo revisa, la contadora lo cotiza, legal arma el contrato, marketing lo comunica y el CEO decide.</p>
+    <div class="chips" aria-label="Tarifas de referencia">
+      <span><b>$120.000</b> por hora de desarrollo</span>
+      <span><b>IVA 19%</b> sobre servicios</span>
+      <span>Pagos <b>50 · 30 · 20</b></span>
+      <span>Soporte desde <b>$450.000</b>/mes</span>
+    </div>
+  </header>
+
+  <section class="brief" aria-label="Nuevo proyecto">
+    <div class="row2">
+      <div class="field"><label for="empresa">Nombre de tu empresa</label><input type="text" id="empresa" value="Nodo Labs" maxlength="40"></div>
+      <div class="field"><label for="pedido">Lo que pide el cliente</label>
+        <textarea id="pedido" rows="3">Distribuidora de alimentos con 3 vendedores quiere un bot de WhatsApp con IA que tome pedidos, consulte el inventario en Google Sheets y genere la factura en Alegra. Reciben unos 80 pedidos al día.</textarea></div>
+    </div>
+    <div class="actions">
+      <button id="run" class="btn primary" type="button">Arrancar proyecto</button>
+      <button id="stop" class="btn danger" type="button" hidden>Detener</button>
+      <p id="status" class="status" aria-live="polite">Abajo está un proyecto de ejemplo ya resuelto. Cambia la solicitud y arranca.</p>
+    </div>
+    <p id="noSample" class="note" hidden>Esta vista no puede llamar a Claude. Abre la página en claude.ai para que los agentes trabajen de verdad. Mientras tanto puedes mirar el ejemplo.</p>
+  </section>
+
+  <section aria-label="Oficina animada">
+    <div class="scene" id="sceneBox" tabindex="0" aria-label="Escena de la oficina, se puede desplazar de lado">
+      <canvas id="scene" role="img" aria-label="Oficina abierta con diez puestos en dos filas, una pantalla de proyecto en la pared, sala de juntas a la derecha, y al frente cafetería, sofá, mesa de ping-pong, impresora y cabina telefónica."></canvas>
+    </div>
+    <p class="scenehint">En el celular puedes deslizar la escena de lado. Mientras corre un proyecto, la cámara sigue al agente que está trabajando.</p>
+    <div class="crew" id="crew"></div>
+  </section>
+
+  <section aria-labelledby="delivTitle" style="display:grid;gap:12px">
+    <h2 id="delivTitle">Entregables del proyecto</h2>
+    <p class="lede" style="font-size:14px">Toca a cualquier agente para hablar con él. Si le pides un cambio, reescribe su entregable.</p>
+    <div class="delivs" id="delivs"></div>
+  </section>
+</div>
+
+<aside id="chat" class="chat" hidden role="dialog" aria-labelledby="chatTitle">
+  <header>
+    <span class="dot" id="chatDot"></span>
+    <div><h3 id="chatTitle">Sofía</h3><p id="chatRole">Ventas</p></div>
+    <button class="xbtn" id="chatClose" type="button" aria-label="Cerrar chat">×</button>
+  </header>
+  <div class="log" id="chatLog" aria-live="polite"></div>
+  <form id="chatForm">
+    <label for="chatInput" class="eyebrow">Tu mensaje</label>
+    <textarea id="chatInput" rows="2" placeholder="Por ejemplo: bájale el precio a 80 horas"></textarea>
+    <div class="row">
+      <button type="button" class="btn danger" id="chatStop" hidden>Detener</button>
+      <button type="submit" class="btn primary" id="chatSend">Enviar</button>
+    </div>
+  </form>
+</aside>
+
+<script>
+(() => {
+'use strict';
+const W = 1400, H = 820;
+const $ = s => document.querySelector(s);
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const now = () => performance.now();
+const rand = (a, b) => a + Math.random() * (b - a);
+const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const pad3 = n => String(n).padStart(3, '0');
+const fmt = n => Number(n).toLocaleString('es-CO');
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const empresaEl = $('#empresa');
+const company = () => (empresaEl.value.trim() || 'la empresa');
+
+/* ================= Negocio ================= */
+const BIZ = () => `${company()} es una empresa colombiana que está arrancando (S.A.S., régimen ordinario, 10 personas). Vende software a la medida y automatizaciones con IA a pymes.
+Catálogo y precios de referencia (pesos colombianos, antes de IVA):
+- Bot de WhatsApp con IA (atención, pedidos, agendamiento): desde $3.500.000.
+- Automatización de procesos con n8n o Make (facturas, inventario, reportes): $1.800.000 a $6.000.000 por flujo.
+- Agentes de IA a la medida con la API de Claude: desde $8.000.000.
+- Integraciones y dashboards (Google Sheets, CRM, Shopify, Siigo, Alegra): $2.500.000 a $7.000.000.
+- Desarrollo a la medida: $120.000 por hora.
+- Mantenimiento y soporte: desde $450.000 al mes.
+- Infraestructura (APIs, servidores, WhatsApp) se cobra al costo + 15%.
+Finanzas: IVA 19% sobre servicios; factura electrónica DIAN por cada hito; la retención en la fuente depende del cliente. Pagos: 50% anticipo, 30% en la entrega beta y 20% al cierre. Margen objetivo 40%.
+Legal: contrato de prestación de servicios, NDA, la propiedad intelectual pasa al cliente con el pago final, tratamiento de datos personales según la Ley 1581 de 2012, garantía de 30 días.
+Tono: español de Colombia, profesional y cercano.`;
+
+const AG = [
+  { id:'sofia', name:'Sofía', role:'Ventas', title:'Diagnóstico comercial', color:'#F2A93B', look:'headset',
+    task:'Recibe la solicitud y entrega el DIAGNÓSTICO COMERCIAL: quién es el cliente, el problema y lo que le cuesta hoy, la solución con el servicio del catálogo que aplica, qué incluye y qué no, y el siguiente paso comercial.',
+    work:['¡Nuevo lead!','Escuchando al cliente','Esto es para un bot'], doing:'haciendo el diagnóstico comercial',
+    intro:'¡Hola! Soy Sofía, de Ventas. Te explico el diagnóstico o lo ajusto. ¿Qué cambio?' },
+  { id:'daniel', name:'Daniel', role:'Gerente de proyectos', title:'Plan del proyecto', color:'#3E7FD9', look:'lanyard', tag:'SEMANAS',
+    task:'Entrega el PLAN DEL PROYECTO: fases con sus entregables, cronograma en semanas, equipo asignado y riesgos. Termina SIEMPRE con una última línea exacta: SEMANAS: <número total de semanas, solo dígitos>.',
+    work:['Armando el cronograma','Fase 1, fase 2…','¿Quién va en QA?'], doing:'armando el plan y el cronograma',
+    intro:'Quiubo, soy Daniel, gerente de proyectos. Movamos fases, fechas o equipo.' },
+  { id:'laura', name:'Laura', role:'Arquitecta de IA', title:'Arquitectura', color:'#7A5AD6', look:'glasses',
+    task:'Entrega la ARQUITECTURA: componentes (canal, orquestador como n8n, modelo de IA vía API de Claude, base de datos, integraciones), flujo de datos paso a paso, costo mensual de infraestructura en pesos y manejo seguro de credenciales.',
+    work:['Conectando nodos','Claude entiende el pedido','¿Webhook o polling?'], doing:'diseñando la arquitectura',
+    intro:'Hola, soy Laura, arquitecta de IA. Pregúntame por la arquitectura o cambiemos herramientas.' },
+  { id:'natalia', name:'Natalia', role:'Diseño UX/UI', title:'Experiencia y pantallas', color:'#E8607E', look:'beret',
+    task:'Entrega el DISEÑO DE EXPERIENCIA: flujo de conversación o pantallas clave, tono, mensajes de ejemplo y criterios de accesibilidad.',
+    work:['Bocetando el flujo','Menos clics, más claro','Paleta lista'], doing:'diseñando la experiencia',
+    intro:'¡Hola! Soy Natalia, de diseño. Te cambio el flujo, los mensajes o las pantallas.' },
+  { id:'kevin', name:'Kevin', role:'Desarrollo', title:'Plan de desarrollo', color:'#2BAF87', look:'hoodie', tag:'HORAS',
+    task:'Entrega el PLAN DE DESARROLLO: tareas técnicas con horas estimadas, integraciones y APIs, ambiente de pruebas y despliegue. Termina SIEMPRE con una última línea exacta: HORAS: <número total de horas, solo dígitos>.',
+    work:['git commit -m "bot"','Conectando Alegra','Tests en verde'], doing:'estimando el desarrollo',
+    intro:'Qué más, soy Kevin, dev. Pregúntame por tareas, horas o tecnologías.' },
+  { id:'andres', name:'Andrés', role:'QA y seguridad', title:'Plan de pruebas', color:'#E0703A', look:'qa',
+    task:'Entrega el PLAN DE PRUEBAS: casos de prueba clave, prueba de carga, manejo de errores, protección de datos personales (Ley 1581 de 2012) y criterios de aceptación.',
+    work:['Buscando bugs','Probando con audios','Caso borde encontrado'], doing:'armando el plan de pruebas',
+    intro:'Hola, soy Andrés, de QA. Te ajusto casos de prueba o criterios de aceptación.' },
+  { id:'paula', name:'Paula', role:'Contadora', title:'Cotización y finanzas', color:'#1F9AA8', look:'accountant', tag:'TOTAL',
+    task:'Entrega la COTIZACIÓN: horas por tarifa, otros costos, subtotal, IVA 19%, total, pagos por hitos con valores, mantenimiento mensual, margen estimado y notas de facturación electrónica DIAN y retenciones. Termina SIEMPRE con una última línea exacta: TOTAL: <total con IVA en pesos, solo dígitos>.',
+    work:['Horas por tarifa…','IVA del 19%','Cuadrando el margen'], doing:'cotizando y revisando números',
+    intro:'Hola, soy Paula, la contadora. Te recalculo precios, pagos, IVA o margen.' },
+  { id:'camilo', name:'Camilo', role:'Legal', title:'Contrato', color:'#6B7A3A', look:'legal',
+    task:'Entrega el CONTRATO: tipo de contrato, cláusulas clave (alcance, pagos, propiedad intelectual, confidencialidad, datos personales, soporte y garantía, terminación) y los documentos a firmar.',
+    work:['Redactando cláusulas','Propiedad intelectual','¡Sello!'], doing:'armando el contrato',
+    intro:'Buenas, soy Camilo, de legal. Te ajusto cláusulas o documentos del contrato.' },
+  { id:'mariana', name:'Mariana', role:'Marketing', title:'Comunicación', color:'#D64FA6', look:'marketing',
+    task:'Entrega la COMUNICACIÓN: un correo corto para enviar la propuesta al cliente y una idea de caso de éxito para LinkedIn (sin inventar resultados).',
+    work:['Escribiendo el correo','Idea para LinkedIn','¡Esto engancha!'], doing:'escribiendo el correo y el caso de éxito',
+    intro:'¡Hola! Soy Mariana, de marketing. Te cambio el correo o el post.' },
+  { id:'julian', name:'Julián', role:'CEO', title:'Decisión ejecutiva', color:'#24394A', look:'ceo',
+    task:'Entrega la DECISIÓN EJECUTIVA: resumen del negocio (valor y recurrente), si se aprueba o qué se ajusta, riesgos principales y los 3 próximos pasos con responsable y fecha.',
+    work:['Revisando números','¿Vale la pena?','Aprobado con ajustes'], doing:'tomando la decisión final',
+    intro:'Hola, soy Julián, el CEO. Hablemos de la decisión, los riesgos o los próximos pasos.' },
+];
+const CHAIN = AG.map(a => `${a.name} (${a.role})`).join(' → ');
+
+const EXAMPLE = [
+`- **Cliente:** distribuidora de alimentos, 3 vendedores, unos **80 pedidos al día** por WhatsApp
+- **Problema:** pedidos a mano, errores de inventario y facturas que salen tarde
+- **Solución:** bot de WhatsApp con IA que toma el pedido, revisa el inventario en Google Sheets y factura en Alegra
+- **Incluye:** bot, integraciones, panel de pedidos y capacitación
+- **No incluye:** cambios al ERP ni campañas masivas
+- **Siguiente paso:** reunión de 45 min para validar el catálogo de productos`,
+`- **Fase 1 (sem 1):** levantamiento, catálogo y reglas de precios
+- **Fase 2 (sem 2–3):** bot de pedidos e inventario
+- **Fase 3 (sem 4):** facturación en Alegra
+- **Fase 4 (sem 5):** piloto con 2 vendedores
+- **Fase 5 (sem 6):** salida a producción y capacitación
+- Equipo: Laura, Natalia, Kevin y Andrés
+- **Riesgo:** inventario desactualizado en la hoja; se nombra un responsable diario
+SEMANAS: 6`,
+`- **Canal:** API oficial de WhatsApp Business
+- **Orquestador:** n8n en servidor propio
+- **IA:** API de Claude para entender el pedido y responder
+- **Datos:** Google Sheets para inventario y una base de pedidos
+- **Facturación:** API de Alegra
+- **Flujo:** mensaje → la IA extrae productos → revisa stock → confirma con el cliente → crea la factura → envía el PDF
+- **Infraestructura:** unos **$280.000/mes**, al costo + 15%
+- Credenciales cifradas y acceso por roles`,
+`- Saludo corto con el nombre del cliente y menú de 3 opciones
+- Pedido en lenguaje natural: "2 cajas de aceite y 1 bulto de arroz"
+- El bot **siempre confirma el resumen** antes de facturar
+- Si no hay stock, propone un reemplazo
+- Tono cercano y claro, sin tecnicismos
+- Opción de hablar con un vendedor en cualquier momento
+- Panel web con letra grande y filtros por vendedor`,
+`- WhatsApp API y n8n: **12 h**
+- Prompt y extracción de pedidos con Claude: **18 h**
+- Conexión al inventario en Sheets: **14 h**
+- Facturación en Alegra: **16 h**
+- Panel de pedidos: **18 h**
+- Pruebas, despliegue y monitoreo: **12 h**
+- Ambiente de pruebas separado del de producción
+HORAS: 90`,
+`- 50 pedidos reales de prueba, con errores de ortografía y audios
+- Casos: pedido sin stock, producto que no existe y cliente nuevo
+- Carga: 30 mensajes por minuto sin caídas
+- Si Alegra falla, el pedido queda en cola y avisa al vendedor
+- **Datos personales:** aviso de privacidad y autorización según la Ley 1581 de 2012
+- **Aceptación:** 95% de pedidos bien interpretados en el piloto`,
+`- Desarrollo: 90 h × $120.000 = **$10.800.000**
+- IVA 19%: $2.052.000
+- **Total: $12.852.000**
+- Pagos: 50% anticipo ($6.426.000), 30% en la beta ($3.855.600) y 20% al cierre ($2.570.400)
+- Mantenimiento: **$450.000/mes** + infraestructura al costo + 15%
+- Margen estimado: 42%
+- Factura electrónica DIAN por hito; revisar si el cliente practica retención
+TOTAL: 12852000`,
+`- **Contrato de prestación de servicios** con anexo técnico y cronograma
+- Pagos por hitos; intereses si el pago pasa de 15 días
+- **Propiedad intelectual:** el código pasa al cliente con el pago final
+- **Confidencialidad (NDA)** para las dos partes
+- **Datos personales:** el cliente es responsable y nosotros encargados (Ley 1581 de 2012)
+- Garantía de 30 días y soporte en 8 horas hábiles
+- A firmar: contrato, NDA y acta de inicio`,
+`- **Correo:** "Hola, les compartimos la propuesta para automatizar sus pedidos por WhatsApp con IA: 6 semanas y facturación en Alegra incluida. ¿Les queda bien una llamada el jueves a las 10 a. m.?"
+- **Caso de éxito en LinkedIn:** contar el antes y el después del proceso de pedidos, con cifras reales cuando el cliente las apruebe
+- Pedir permiso para usar su logo
+- Publicar 30 días después de salir a producción`,
+`- **Negocio:** $12,9 millones + $450.000/mes recurrentes, margen del 42%
+- **Decisión:** aprobado, arrancamos cuando llegue el anticipo
+- **Riesgo 1:** inventario desordenado; Daniel lo valida en la semana 1
+- **Riesgo 2:** cambios de alcance; se manejan con control de cambios
+- **Próximos pasos:** Sofía envía la propuesta hoy · Camilo manda el contrato el martes · Daniel agenda el arranque el lunes`
+];
+
+/* ================= Plano de la oficina ================= */
+const ROW_A = { deskY:392, spotY:368 }, ROW_B = { deskY:592, spotY:568 };
+const DESK = AG.map((a, i) => {
+  const row = i < 5 ? ROW_A : ROW_B, cx = 250 + (i % 5) * 190, w = i === 9 ? 176 : 150;
+  return { cx, x:cx - w / 2, y:row.deskY, w, h:36, spot:{ x:cx + 28, y:row.spotY } };
+});
+const FURN = {
+  rack:   { x:132, y:246, w:62, h:34 },
+  agua:   { x:1092, y:248, w:34, h:30 },
+  cafe:   { x:40,  y:700, w:210, h:48 },
+  sofa:   { x:330, y:722, w:210, h:44 },
+  ping:   { x:640, y:700, w:200, h:48 },
+  print:  { x:930, y:704, w:66,  h:40 },
+  cabina: { x:1196, y:690, w:80, h:70 },
+  mesa:   { x:1190, y:428, w:160, h:54 },
+  matera: { x:1340, y:700, w:40, h:40 },
+};
+const OBST = [...DESK, ...Object.values(FURN)];
+const ENTRANCE = { x:75, y:300 };
+const SEATS = [1196, 1236, 1276, 1316, 1352].map(x => ({ x, y:404 })).concat([1196, 1236, 1276, 1316, 1352].map(x => ({ x, y:508 })));
+const POIS = [
+  { at:{ x:140, y:676 }, say:['Un tintico y sigo','¿Quién quiere café?','Café de Huila, del bueno'], up:true, tag:'cafe' },
+  { at:{ x:436, y:792 }, say:['Pausa activa','Este sofá es una trampa','Dos minuticos y vuelvo'] },
+  { at:{ x:622, y:724 }, say:['¿Un ping-pong?','¡Saque!'], tag:'pingL' },
+  { at:{ x:858, y:724 }, say:['¡Le voy a ganar!','¡Punto para mí!'], tag:'pingR' },
+  { at:{ x:962, y:686 }, say:['Imprimiendo la propuesta','¿Otra vez sin papel?'], up:true, tag:'print' },
+  { at:{ x:1236, y:792 }, say:['Llamada con un cliente','Le marco ya mismo'] },
+  { at:{ x:1110, y:298 }, say:['Hidratación','Agüita fría'], up:true },
+  { at:{ x:166, y:300 }, say:['Servidores al 30%','Todo arriba y estable'], up:true },
+  { at:ENTRANCE, say:['¿Llegará otro cliente?','Buen día para vender'] },
+  { at:{ x:760, y:300 }, say:['Mire ese tablero','Vamos bien con los proyectos'], up:true },
+  { at:{ x:1270, y:560 }, say:['Sala libre, ¿la reservo?'] },
+];
+const GREET = ['¡Quiubo! ¿Cómo va eso?','¿Ya hiciste commit?','¿Almorzamos juntos?','¿Viste el correo del cliente?'];
+const REPLY = ['¡Bien, gracias!','Aquí camellando','De una','Ya casi termino'];
+const SOLO = ['Hoy cerramos un cliente, lo siento','Hmm, ¿qué falta?','Automatizar todo, esa es la idea'];
+
+/* ================= Caminos (A*) ================= */
+const CELL = 12, GC = Math.ceil(W / CELL), GR = Math.ceil(H / CELL), PADO = 13;
+const walk = new Uint8Array(GC * GR);
+(function(){
+  for (let r = 0; r < GR; r++) for (let c = 0; c < GC; c++) {
+    const x = c * CELL + CELL / 2, y = r * CELL + CELL / 2;
+    let ok = x >= 18 && x <= W - 18 && y >= 290 && y <= 806;
+    if (ok) for (const o of OBST) if (x > o.x - PADO && x < o.x + o.w + PADO && y > o.y - PADO && y < o.y + o.h + PADO) { ok = false; break; }
+    walk[r * GC + c] = ok ? 1 : 0;
+  }
+})();
+const inGrid = (c, r) => c >= 0 && r >= 0 && c < GC && r < GR;
+const isWalkPt = (x, y) => { const c = Math.floor(x / CELL), r = Math.floor(y / CELL); return inGrid(c, r) && walk[r * GC + c] === 1; };
+function nearestCell(x, y){
+  const c0 = clamp(Math.floor(x / CELL), 0, GC - 1), r0 = clamp(Math.floor(y / CELL), 0, GR - 1);
+  if (walk[r0 * GC + c0]) return [c0, r0];
+  for (let rad = 1; rad < 40; rad++) {
+    let best = null, bd = 1e9;
+    for (let dr = -rad; dr <= rad; dr++) for (let dc = -rad; dc <= rad; dc++) {
+      if (Math.max(Math.abs(dr), Math.abs(dc)) !== rad) continue;
+      const c = c0 + dc, r = r0 + dr;
+      if (inGrid(c, r) && walk[r * GC + c]) { const d = dc * dc + dr * dr; if (d < bd) { bd = d; best = [c, r]; } }
+    }
+    if (best) return best;
+  }
+  return [c0, r0];
+}
+function hpush(h, n){ h.push(n); let i = h.length - 1; while (i > 0) { const p = (i - 1) >> 1; if (h[p][0] <= h[i][0]) break; [h[p], h[i]] = [h[i], h[p]]; i = p; } }
+function hpop(h){ const top = h[0], last = h.pop(); if (h.length) { h[0] = last; let i = 0; for (;;) { const l = 2 * i + 1, r = l + 1; let m = i; if (l < h.length && h[l][0] < h[m][0]) m = l; if (r < h.length && h[r][0] < h[m][0]) m = r; if (m === i) break; [h[m], h[i]] = [h[i], h[m]]; i = m; } } return top; }
+function los(a, b){ const d = Math.hypot(b.x - a.x, b.y - a.y), n = Math.max(1, Math.ceil(d / 5)); for (let k = 0; k <= n; k++) if (!isWalkPt(a.x + (b.x - a.x) * k / n, a.y + (b.y - a.y) * k / n)) return false; return true; }
+function findPath(from, to){
+  const [sc, sr] = nearestCell(from.x, from.y), [tc, tr] = nearestCell(to.x, to.y);
+  const N = GC * GR, g = new Float32Array(N).fill(Infinity), came = new Int32Array(N).fill(-1), closed = new Uint8Array(N);
+  const s = sr * GC + sc, goal = tr * GC + tc;
+  const hf = (c, r) => { const dx = Math.abs(c - tc), dy = Math.abs(r - tr); return Math.max(dx, dy) + .414 * Math.min(dx, dy); };
+  const open = []; g[s] = 0; hpush(open, [hf(sc, sr), s]);
+  while (open.length) {
+    const cur = hpop(open)[1];
+    if (closed[cur]) continue; if (cur === goal) break; closed[cur] = 1;
+    const cc = cur % GC, cr = (cur / GC) | 0;
+    for (let dr = -1; dr <= 1; dr++) for (let dc = -1; dc <= 1; dc++) {
+      if (!dr && !dc) continue;
+      const nc = cc + dc, nr = cr + dr; if (!inGrid(nc, nr)) continue;
+      const ni = nr * GC + nc; if (!walk[ni] || closed[ni]) continue;
+      if (dr && dc && (!walk[cr * GC + nc] || !walk[nr * GC + cc])) continue;
+      const ng = g[cur] + (dr && dc ? 1.414 : 1);
+      if (ng < g[ni]) { g[ni] = ng; came[ni] = cur; hpush(open, [ng + hf(nc, nr), ni]); }
+    }
+  }
+  if (goal !== s && came[goal] === -1) return [];
+  const cells = []; for (let i = goal; i !== -1; i = came[i]) { cells.push(i); if (i === s) break; }
+  cells.reverse();
+  const pts = [{ x:from.x, y:from.y }, ...cells.slice(1).map(i => ({ x:(i % GC) * CELL + CELL / 2, y:((i / GC) | 0) * CELL + CELL / 2 }))];
+  if (isWalkPt(to.x, to.y)) { if (pts.length > 1) pts[pts.length - 1] = { x:to.x, y:to.y }; else pts.push({ x:to.x, y:to.y }); }
+  const out = []; let i = 0;
+  while (i < pts.length - 1) { let j = pts.length - 1; while (j > i + 1 && !los(pts[i], pts[j])) j--; out.push(pts[j]); i = j; }
+  return out;
+}
+
+/* ================= Personajes ================= */
+AG.forEach((a, i) => Object.assign(a, {
+  idx:i, x:DESK[i].spot.x, y:DESK[i].spot.y, path:[], arrive:null, phase:rand(0, 6), facing:i % 2 ? -1 : 1, lookUp:false, at:null,
+  busy:false, working:false, carry:false, bubble:null, nextIdle:now() + rand(1500, 6000), jumpUntil:0, seed:Math.random() * 6
+}));
+function walkTo(a, pt){
+  if (a.arrive) { const f = a.arrive; a.arrive = null; f(false); }
+  a.lookUp = false; a.at = null;
+  const path = findPath({ x:a.x, y:a.y }, pt);
+  return new Promise(res => { if (!path.length) { a.path = []; res(true); return; } a.path = path; a.arrive = res; });
+}
+function say(a, text, ms){ a.bubble = { text, start:now(), until:now() + (ms || Math.max(2300, text.length * 70)) }; }
+function face(a, b){ a.facing = b.x >= a.x ? 1 : -1; a.lookUp = false; }
+const atDesk = a => Math.hypot(a.x - DESK[a.idx].spot.x, a.y - DESK[a.idx].spot.y) < 3 && !a.path.length;
+
+function idleTick(a, t){
+  if (a.busy || a.path.length || t < a.nextIdle) return;
+  a.nextIdle = Infinity;
+  const done = ok => { if (!a.busy) a.nextIdle = now() + rand(3000, 7500); return ok; };
+  const r = Math.random();
+  if (r < 0.2) {
+    walkTo(a, DESK[a.idx].spot).then(ok => { if (ok && !a.busy) { a.lookUp = true; say(a, pick(['Volviendo a lo mío','A responder correos','Concentración total'])); } done(ok); });
+  } else if (r < 0.62) {
+    const p = pick(POIS.filter(p => Math.hypot(p.at.x - a.x, p.at.y - a.y) > 40 && !AG.some(o => o !== a && o.at === p.tag && p.tag)));
+    walkTo(a, p.at).then(ok => { if (ok && !a.busy) { say(a, pick(p.say)); a.lookUp = !!p.up; a.at = p.tag || null; if (p.tag === 'pingL') a.facing = 1; if (p.tag === 'pingR') a.facing = -1; } done(ok); });
+  } else if (r < 0.88) {
+    const b = pick(AG.filter(o => o !== a));
+    if (!b.busy && !b.path.length) b.nextIdle = Math.max(b.nextIdle, now() + 8000);
+    const side = a.x < b.x ? -1 : 1;
+    walkTo(a, { x:b.x + side * 44, y:b.y }).then(ok => {
+      if (ok && !a.busy) {
+        face(a, b);
+        if (b.working) { say(a, `¡Ánimo, ${b.name}!`); setTimeout(() => say(b, '¡Gracias, ya casi!'), 1300); }
+        else { say(a, pick(GREET)); setTimeout(() => { if (!b.busy) { face(b, a); say(b, pick(REPLY)); } }, 1400); }
+      }
+      done(ok);
+    });
+  } else { say(a, pick(SOLO)); done(true); }
+}
+
+/* ================= Entregables ================= */
+let projNo = 31, isExample = true, running = false, leadAtDoor = false, ctl = null, focus = null, celebrateUntil = 0;
+const D = AG.map((a, i) => ({ text:EXAMPLE[i], status:'example', note:'' }));
+const ST = AG.map(() => ({ active:false, p:1, start:0, done:true }));
+const CHIP = { example:'EJEMPLO', waiting:'EN ESPERA', thinking:'PENSANDO…', writing:'ESCRIBIENDO…', done:'LISTO', edited:'EDITADO', stopped:'DETENIDO', error:'ERROR' };
+const TAG_RE = /^\s*[-*•]?\s*\**(SEMANAS|HORAS|TOTAL)\**\s*:.*$/gim;
+const stripTags = s => s.replace(TAG_RE, '').trim();
+function readTag(text, tag){ const m = text.match(new RegExp('^\\s*[-*•]?\\s*\\**' + tag + '\\**\\s*:\\s*\\**\\s*\\$?\\s*([\\d.,\\s]+)', 'im')); if (!m) return null; const n = parseInt(m[1].replace(/[^\d]/g, ''), 10); return n > 0 ? n : null; }
+const PJ = { semanas:6, horas:90, total:12852000 };
+function refreshPJ(){ PJ.semanas = readTag(D[1].text, 'SEMANAS'); PJ.horas = readTag(D[4].text, 'HORAS'); PJ.total = readTag(D[6].text, 'TOTAL'); }
+
+function esc(s){ return s.replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c])); }
+function inline(s){ return esc(s).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>'); }
+function md(text){
+  let html = '', inList = false;
+  for (const raw of text.split('\n')) {
+    const l = raw.trim(); if (!l) continue;
+    const m = l.match(/^([-*•]|\d+[.)])\s+(.*)$/);
+    if (m) { if (!inList) { html += '<ul>'; inList = true; } html += '<li>' + inline(m[2]) + '</li>'; }
+    else { if (inList) { html += '</ul>'; inList = false; } html += '<p>' + inline(l.replace(/^#+\s*/, '')) + '</p>'; }
+  }
+  if (inList) html += '</ul>';
+  return html;
+}
+const delivsEl = $('#delivs'), crewEl = $('#crew');
+AG.forEach((a, i) => {
+  const d = document.createElement('details');
+  d.className = 'deliv'; d.id = 'deliv-' + a.id; if (i < 2) d.open = true;
+  d.innerHTML = `<summary><span class="num">${String(i + 1).padStart(2, '0')}</span><span class="dot" style="background:${a.color}"></span><span class="who"><strong>${a.name}</strong><span>${a.role} · ${a.title}</span></span><span class="chip"></span></summary>
+  <div class="dbody"><div class="md"></div><p class="dnote" hidden></p><div class="dacts"><button type="button" class="btn ghost" data-chat="${i}">Hablar con ${a.name}</button><button type="button" class="btn ghost" data-copy="${i}">Copiar</button></div></div>`;
+  delivsEl.append(d);
+  const b = document.createElement('button'); b.type = 'button'; b.dataset.chat = i;
+  b.innerHTML = `<span class="dot" style="background:${a.color}"></span><b>${a.name}</b><span class="r">${a.role}</span>`;
+  crewEl.append(b);
+});
+const pending = new Set();
+function renderDeliv(i){
+  const el = document.getElementById('deliv-' + AG[i].id), d = D[i];
+  const chip = el.querySelector('.chip'); chip.className = 'chip ' + d.status; chip.textContent = CHIP[d.status];
+  const mdEl = el.querySelector('.md');
+  if (d.status === 'waiting') mdEl.innerHTML = `<p class="muted">${i ? `Esperando el entregable de ${AG[i - 1].name}.` : 'Esperando la solicitud.'}</p>`;
+  else if (d.status === 'thinking' && !d.text) mdEl.innerHTML = '<p class="muted">Pensando…</p>';
+  else mdEl.innerHTML = md(stripTags(d.text)) || '<p class="muted">Sin texto.</p>';
+  const n = el.querySelector('.dnote'); n.hidden = !d.note; n.textContent = d.note;
+}
+function queueRender(i){ if (pending.has(i)) return; pending.add(i); requestAnimationFrame(() => { pending.delete(i); renderDeliv(i); }); }
+function openDeliv(i){ document.getElementById('deliv-' + AG[i].id).open = true; }
+AG.forEach((_, i) => renderDeliv(i));
+document.addEventListener('click', e => {
+  const c = e.target.closest('[data-chat]'); if (c) { openChat(+c.dataset.chat); return; }
+  const cp = e.target.closest('[data-copy]');
+  if (cp) {
+    const i = +cp.dataset.copy, txt = stripTags(D[i].text).replace(/\*\*/g, '');
+    const ok = () => { cp.textContent = 'Copiado'; setTimeout(() => cp.textContent = 'Copiar', 1500); };
+    try { navigator.clipboard.writeText(txt).then(ok, () => selectText(i)); } catch { selectText(i); }
+  }
+});
+function selectText(i){ const el = document.querySelector('#deliv-' + AG[i].id + ' .md'); const r = document.createRange(); r.selectNodeContents(el); const s = getSelection(); s.removeAllRanges(); s.addRange(r); }
+empresaEl.addEventListener('input', () => { $('#brandTitle').textContent = 'La oficina de ' + company(); });
+
+/* ================= Claude ================= */
+const samplePromise = (window.claude && typeof window.claude.use === 'function') ? Promise.resolve(window.claude.use('sample')).catch(() => null) : Promise.resolve(null);
+let sampleFn;
+samplePromise.then(s => { sampleFn = s; if (!s) $('#noSample').hidden = false; });
+const ERR = {
+  not_granted:'No se dio permiso para usar Claude en esta página.',
+  sampling_disabled:'Claude no está disponible para esta cuenta.',
+  rate_limited:'Demasiadas solicitudes seguidas. Espera un momento y vuelve a intentar.',
+  session_expired:'Tu sesión venció. Vuelve a iniciar sesión en claude.ai.',
+  refused:'Claude no quiso responder esa solicitud. Cambia la solicitud e intenta de nuevo.',
+  empty_completion:'Claude no devolvió texto. Prueba con una solicitud más sencilla.',
+  prompt_too_large:'El texto es demasiado largo. Acorta la solicitud.',
+};
+const errCopy = c => ERR[c] || 'Se cayó la conexión con Claude. Intenta de nuevo.';
+const statusEl = $('#status'), runBtn = $('#run'), stopBtn = $('#stop'), pedidoEl = $('#pedido');
+const setStatus = s => { statusEl.textContent = s; };
+function projData(){
+  const parts = [];
+  if (PJ.semanas) parts.push(`${PJ.semanas} semanas`);
+  if (PJ.horas) parts.push(`${PJ.horas} horas de desarrollo (a $120.000 la hora = $${fmt(PJ.horas * 120000)} antes de IVA)`);
+  if (PJ.total) parts.push(`total cotizado $${fmt(PJ.total)} con IVA`);
+  return parts.join(' · ');
+}
+function agentPrompt(i, req, prev){
+  const a = AG[i];
+  let p = `Eres ${a.name}, ${a.role} de ${company()}. Trabajas en una cadena de 10 agentes: ${CHAIN}. Tú eres el paso ${i + 1}.
+
+CONTEXTO DE LA EMPRESA:
+${BIZ()}
+
+TU TAREA: ${a.task}
+
+SOLICITUD DEL CLIENTE (proyecto #${pad3(projNo)}):
+"""${req}"""
+`;
+  const pd = projData(); if (pd && i > 0) p += `\nDATOS DEL PROYECTO YA DEFINIDOS (úsalos tal cual): ${pd}.\n`;
+  if (prev.length) p += `\nLO QUE YA HICIERON TUS COMPAÑEROS:\n` + prev.map(x => `### ${x.name} – ${x.title}\n${x.text}`).join('\n\n') + '\n';
+  p += `\nFORMATO: español de Colombia, máximo 150 palabras, solo viñetas que empiecen con "- ", con **negrilla** para lo clave. Sin saludo, sin título y sin despedida. Usa el catálogo y las tarifas de la empresa; no inventes datos del cliente.`;
+  return p;
+}
+async function callAgent(i, req, prev, sample, signal){
+  const d = D[i]; d.text = ''; d.note = ''; d.status = 'thinking'; renderDeliv(i);
+  try {
+    const res = await sample(agentPrompt(i, req, prev), { modelTier:'quick', signal, onText: ({ text }) => { d.text = text; d.status = 'writing'; queueRender(i); } });
+    d.text = res.text; d.status = 'done'; d.note = res.truncated ? 'La respuesta quedó cortada. Prueba con una solicitud más corta.' : '';
+    renderDeliv(i); return res.text;
+  } catch (e) {
+    if (e && e.text) d.text = e.text;
+    d.status = e && e.code === 'cancelled' ? 'stopped' : 'error';
+    d.note = d.status === 'error' ? errCopy(e && e.code) : '';
+    renderDeliv(i); throw e;
+  }
+}
+function guard(p, signal){
+  return new Promise((res, rej) => {
+    if (signal.aborted) return rej({ code:'cancelled' });
+    const on = () => rej({ code:'cancelled' });
+    signal.addEventListener('abort', on, { once:true });
+    p.then(v => { signal.removeEventListener('abort', on); res(v); }, e => { signal.removeEventListener('abort', on); rej(e); });
+  });
+}
+const MIN_WORK = 5500;
+const handoff = n => { const s = DESK[n.idx].spot; return { x:s.x + (n.idx % 5 === 4 ? -58 : 58), y:s.y }; };
+
+async function runProject(req, sample){
+  ctl = new AbortController(); const signal = ctl.signal;
+  running = true; runBtn.disabled = true; stopBtn.hidden = false; pedidoEl.readOnly = true; empresaEl.readOnly = true;
+  projNo = isExample ? 32 : projNo + 1; isExample = false; PJ.semanas = PJ.horas = PJ.total = null;
+  ST.forEach(s => { s.active = false; s.p = 0; s.done = false; });
+  D.forEach((d, i) => { d.text = ''; d.note = ''; d.status = 'waiting'; renderDeliv(i); });
+  const prev = [];
+  try {
+    const s0 = AG[0]; s0.busy = true; leadAtDoor = true; focus = s0;
+    say(s0, '¡Llegó un cliente nuevo!');
+    setStatus(`Proyecto #${pad3(projNo)}: Sofía va a la entrada a recibir al cliente.`);
+    await guard(walkTo(s0, ENTRANCE), signal);
+    leadAtDoor = false; s0.carry = true; say(s0, `Proyecto #${pad3(projNo)}, ¡a trabajar!`);
+    await guard(sleep(600), signal);
+    await guard(walkTo(s0, DESK[0].spot), signal);
+    let nextArrive = Promise.resolve(true);
+    for (let i = 0; i < AG.length; i++) {
+      const a = AG[i], st = ST[i];
+      focus = a; a.carry = false; a.working = true; a.lookUp = true;
+      st.active = true; st.p = 0; st.start = now(); st.done = false;
+      say(a, pick(a.work)); setStatus(`${a.name} (${a.role}) está ${a.doing}…`);
+      if (i < AG.length - 1) { const n = AG[i + 1]; n.busy = true; nextArrive = walkTo(n, DESK[n.idx].spot); }
+      openDeliv(i);
+      const text = await callAgent(i, req, prev, sample, signal);
+      if (a.tag) refreshPJ();
+      const el = now() - st.start; if (el < MIN_WORK) await guard(sleep(MIN_WORK - el), signal);
+      st.active = false; st.p = 1; st.done = true; a.working = false; a.lookUp = false;
+      prev.push({ name:a.name, title:a.title, text:stripTags(text) });
+      if (i < AG.length - 1) {
+        const n = AG[i + 1];
+        await guard(nextArrive, signal); n.lookUp = true;
+        a.carry = true; say(a, `Le llevo esto a ${n.name}`);
+        await guard(walkTo(a, handoff(n)), signal);
+        face(a, n); face(n, a);
+        say(a, `${n.name}, aquí va: ${a.title.toLowerCase()}.`);
+        await guard(sleep(1000), signal);
+        a.carry = false; n.carry = true; say(n, '¡Recibido!');
+        await guard(sleep(650), signal);
+        a.busy = false; a.nextIdle = now() + 1800;
+      }
+    }
+    say(AG[9], '¡Aprobado! Todos a la sala');
+    setStatus(`Proyecto #${pad3(projNo)} aprobado. El equipo celebra en la sala de juntas.`);
+    AG.forEach(a => { a.busy = true; a.working = false; });
+    focus = { x:1270, y:450 };
+    await guard(Promise.all(AG.map((a, k) => walkTo(a, SEATS[k]))), signal);
+    AG.forEach((a, k) => { a.jumpUntil = now() + 4600; a.facing = k < 5 ? 1 : -1; });
+    celebrateUntil = now() + 6000;
+    ['¡Eso!','¡Cronograma listo!','¡Arquitectura top!','¡Qué diseño!','¡A codear!','¡Cero bugs!','¡Números cuadrados!','¡Firmado!','¡A redes!','¡Gran trabajo!'].forEach((s, k) => setTimeout(() => say(AG[k], s, 2200), k * 220));
+    spawnConfetti();
+    await guard(sleep(4800), signal);
+    setStatus(`Proyecto #${pad3(projNo)} terminado${projData() ? ': ' + projData() : ''}. Revisa los entregables o habla con un agente.`);
+  } catch (e) {
+    const cancelled = e && e.code === 'cancelled';
+    D.forEach((d, i) => { if (['waiting', 'thinking', 'writing'].includes(d.status)) { d.status = 'stopped'; renderDeliv(i); } });
+    setStatus(cancelled ? 'Proyecto detenido. Puedes arrancar de nuevo cuando quieras.' : errCopy(e && e.code));
+    if (e && (e.code === 'not_granted' || e.code === 'sampling_disabled')) $('#noSample').hidden = false;
+  } finally {
+    running = false; runBtn.disabled = false; stopBtn.hidden = true; pedidoEl.readOnly = false; empresaEl.readOnly = false; leadAtDoor = false; focus = null;
+    ST.forEach(s => s.active = false);
+    AG.forEach(a => { a.busy = false; a.working = false; a.carry = false; a.lookUp = false; a.nextIdle = now() + rand(800, 2500); });
+  }
+}
+runBtn.addEventListener('click', async () => {
+  if (running) return;
+  const req = pedidoEl.value.trim();
+  if (!req) { setStatus('Escribe lo que pide el cliente.'); pedidoEl.focus(); return; }
+  setStatus('Conectando con Claude…');
+  const sample = sampleFn !== undefined ? sampleFn : await samplePromise;
+  if (!sample) { setStatus('Esta vista no puede llamar a Claude.'); $('#noSample').hidden = false; return; }
+  userScrolledAt = 0; runProject(req, sample);
+});
+stopBtn.addEventListener('click', () => ctl && ctl.abort());
+
+/* ================= Chat ================= */
+const chats = AG.map(() => []);
+let chatIdx = -1, chatCtl = null, chatBusy = false;
+const chatEl = $('#chat'), chatLog = $('#chatLog'), chatInput = $('#chatInput'), chatSend = $('#chatSend'), chatStop = $('#chatStop');
+const MA = '<<<ENTREGABLE', MB = 'ENTREGABLE>>>';
+function parseChat(text){ const ia = text.indexOf(MA); if (ia < 0) return { visible:text.trim(), block:null }; const rest = text.slice(ia + MA.length), ib = rest.indexOf(MB); return { visible:text.slice(0, ia).trim(), block:(ib < 0 ? rest : rest.slice(0, ib)).trim() }; }
+function chatRules(i){
+  const a = AG[i];
+  return `Eres ${a.name}, ${a.role} de ${company()}, uno de 10 agentes en cadena (${CHAIN}). Estás chateando con el dueño de la empresa.
+
+CONTEXTO DE LA EMPRESA:
+${BIZ()}
+
+SOLICITUD DEL CLIENTE (proyecto #${pad3(projNo)}): """${pedidoEl.value.trim()}"""
+${projData() ? 'DATOS DEL PROYECTO: ' + projData() + '.' : ''}
+
+TU TAREA EN LA CADENA: ${a.task}
+
+TU ENTREGABLE ACTUAL:
+${stripTags(D[i].text) || '(todavía vacío)'}
+
+REGLAS:
+- Habla en primera persona, en español de Colombia, amable y breve (máximo 60 palabras).
+- Si te piden cambiar, corregir o agregar algo a tu entregable, responde con una frase corta y después escribe el entregable COMPLETO y actualizado entre una línea que diga exactamente ${MA} y otra que diga exactamente ${MB}. Mismo formato: viñetas con "- ", máximo 150 palabras.${a.tag ? ` Dentro del bloque, termina con la línea ${a.tag}: <número>.` : ''}
+- Si no te piden cambios, no escribas ese bloque.`;
+}
+function addMsg(cls, html){ const m = document.createElement('div'); m.className = 'msg ' + cls; m.innerHTML = html; chatLog.append(m); chatLog.scrollTop = chatLog.scrollHeight; return m; }
+function renderChat(){
+  chatLog.innerHTML = ''; addMsg('them', esc(AG[chatIdx].intro));
+  for (const t of chats[chatIdx]) { if (t.role === 'user') addMsg('me', esc(t.content)); else { const p = parseChat(t.content); addMsg('them', esc(p.visible || 'Listo, actualicé mi entregable.') + (p.block ? '<br><em>Entregable actualizado.</em>' : '')); } }
+}
+function openChat(i){
+  if (chatBusy && i !== chatIdx) chatCtl && chatCtl.abort();
+  chatIdx = i; const a = AG[i];
+  $('#chatTitle').textContent = a.name; $('#chatRole').textContent = `${a.role} · ${a.title}`; $('#chatDot').style.background = a.color;
+  chatEl.hidden = false; renderChat(); chatInput.focus();
+  if (!a.busy) a.nextIdle = Math.max(a.nextIdle, now() + 4000);
+  say(a, '¿En qué te ayudo?'); scrollToX(a.x, true);
+}
+function closeChat(){ chatCtl && chatCtl.abort(); chatEl.hidden = true; }
+$('#chatClose').addEventListener('click', closeChat);
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && !chatEl.hidden) closeChat(); });
+chatStop.addEventListener('click', () => chatCtl && chatCtl.abort());
+chatInput.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); $('#chatForm').requestSubmit(); } });
+$('#chatForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const i = chatIdx, text = chatInput.value.trim();
+  if (!text || chatBusy || i < 0) return;
+  const sample = sampleFn !== undefined ? sampleFn : await samplePromise;
+  if (!sample) { addMsg('sys', 'Esta vista no puede llamar a Claude. Abre la página en claude.ai.'); return; }
+  if (D[i].status === 'thinking' || D[i].status === 'writing') { addMsg('sys', `${AG[i].name} está escribiendo. Espera a que termine.`); return; }
+  chats[i].push({ role:'user', content:text }); chatInput.value = ''; addMsg('me', esc(text));
+  const bubble = addMsg('them', '<em>Pensando…</em>');
+  chatCtl = new AbortController(); chatBusy = true; chatSend.disabled = true; chatStop.hidden = false;
+  try {
+    const res = await sample([{ role:'user', content:chatRules(i) }, ...chats[i].slice(-12)], { cache:false, modelTier:'quick', signal:chatCtl.signal,
+      onText: ({ text }) => { const p = parseChat(text); bubble.innerHTML = esc(p.visible) + (p.block !== null ? '<br><em>Actualizando el entregable…</em>' : ''); chatLog.scrollTop = chatLog.scrollHeight; } });
+    chats[i].push({ role:'assistant', content:res.text });
+    const p = parseChat(res.text);
+    bubble.innerHTML = esc(p.visible || 'Listo, actualicé mi entregable.');
+    if (p.block) {
+      D[i].text = p.block; D[i].status = 'edited'; D[i].note = '';
+      if (AG[i].tag) { refreshPJ(); if (projData()) addMsg('sys', `Pantalla actualizada: ${projData()}.`); }
+      renderDeliv(i); openDeliv(i); addMsg('sys', `Entregable de ${AG[i].name} actualizado.`); say(AG[i], '¡Listo, ya lo cambié!');
+    } else if (p.visible) say(AG[i], p.visible.length > 60 ? p.visible.slice(0, 57) + '…' : p.visible);
+  } catch (err) {
+    if (err && err.code === 'cancelled') bubble.innerHTML = err.text ? esc(parseChat(err.text).visible) + ' <em>(detenido)</em>' : '<em>Detenido.</em>';
+    else bubble.innerHTML = '<em>' + esc(errCopy(err && err.code)) + '</em>';
+  } finally { chatBusy = false; chatSend.disabled = false; chatStop.hidden = true; }
+});
+
+/* ================= Lienzo ================= */
+const canvas = $('#scene'), ctx = canvas.getContext('2d'), box = $('#sceneBox');
+let scale = 1, uiScale = 1, userScrolledAt = 0;
+function resize(){ const r = canvas.getBoundingClientRect(), dpr = Math.min(2, window.devicePixelRatio || 1); canvas.width = Math.round(r.width * dpr); canvas.height = Math.round(r.height * dpr); scale = r.width / W; uiScale = clamp(.95 / scale, 1, 1.7); ctx.setTransform(canvas.width / W, 0, 0, canvas.height / H, 0, 0); }
+new ResizeObserver(resize).observe(canvas); resize();
+['pointerdown', 'wheel', 'touchstart'].forEach(ev => box.addEventListener(ev, () => { userScrolledAt = now(); }, { passive:true }));
+function scrollToX(x, instant){ const max = box.scrollWidth - box.clientWidth; if (max <= 0) return; const target = clamp(x * scale - box.clientWidth / 2, 0, max); if (instant) box.scrollLeft = target; else box.scrollLeft += (target - box.scrollLeft) * .06; }
+
+const PAL = {
+  light:{ wall:'#E9EEEA', wallTop:'#DCE4DF', trim:'#C6D1CB', floorA:'#D9C3A3', floorB:'#CDB28F', plank:'rgba(90,60,30,.13)', rug:'#B9D8CC', rug2:'#F3D7A8',
+    deskTop:'#F7F3EC', deskFront:'#E3D9CA', deskEdge:'#C9BBA6', leg:'#5B6A72', chair:'#2C3E48', glass:'rgba(160,210,230,.30)',
+    out:'#10202B', label:'#33454F', shadow:'rgba(16,32,43,.18)', plant:'#2E8B62', pot:'#D9784F', screenOff:'#1B2A31', sofa:'#3E7FD9', wood:'#B88A5A' },
+  dark:{ wall:'#1C2A31', wallTop:'#16232A', trim:'#2A3B44', floorA:'#3B3127', floorB:'#33291F', plank:'rgba(0,0,0,.28)', rug:'#21443C', rug2:'#4A3C27',
+    deskTop:'#3A4246', deskFront:'#2B3236', deskEdge:'#20272A', leg:'#8A9AA2', chair:'#0E171C', glass:'rgba(110,170,200,.16)',
+    out:'#05090B', label:'#C9D7DC', shadow:'rgba(0,0,0,.42)', plant:'#3FA878', pot:'#B8613F', screenOff:'#0B1418', sofa:'#2E5FA6', wood:'#7E5D3C' },
+};
+let P = PAL.light, tick = 0;
+function readTheme(){ P = getComputedStyle(document.documentElement).getPropertyValue('--is-dark').trim() === '1' ? PAL.dark : PAL.light; }
+readTheme();
+const FD = (w, s) => `${w} ${s}px "Bricolage Grotesque","Avenir Next",sans-serif`;
+const FB = (w, s) => `${w} ${s}px "Instrument Sans",system-ui,sans-serif`;
+const FM = (w, s) => `${w} ${s}px "JetBrains Mono",ui-monospace,monospace`;
+function rr(x, y, w, h, r){ r = Math.min(r, w / 2, h / 2); ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath(); }
+function boxf(x, y, w, h, fill, r = 3, lw = 2){ rr(x, y, w, h, r); ctx.fillStyle = fill; ctx.fill(); if (lw) { ctx.lineWidth = lw; ctx.strokeStyle = P.out; ctx.stroke(); } }
+function txt(s, x, y, font, color, align = 'center', base = 'middle'){ ctx.font = font; ctx.fillStyle = color; ctx.textAlign = align; ctx.textBaseline = base; ctx.fillText(s, x, y); }
+function circ(x, y, r, fill, stroke, lw = 2){ ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); if (fill) { ctx.fillStyle = fill; ctx.fill(); } if (stroke) { ctx.lineWidth = lw; ctx.strokeStyle = stroke; ctx.stroke(); } }
+function shade(hex, f){ const n = parseInt(hex.slice(1), 16); const c = v => Math.min(255, Math.round(v * f)); return `rgb(${c(n >> 16)},${c((n >> 8) & 255)},${c(n & 255)})`; }
+function glow(x, y, r, color, sy = 1){ const g = ctx.createRadialGradient(x, y, 0, x, y, r); g.addColorStop(0, color); g.addColorStop(1, 'rgba(0,0,0,0)'); ctx.save(); ctx.translate(x, y); ctx.scale(1, sy); ctx.translate(-x, -y); ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill(); ctx.restore(); }
+function heart(x, y, r, c){ ctx.fillStyle = c; ctx.beginPath(); ctx.arc(x - r / 2, y, r / 2, 0, 7); ctx.arc(x + r / 2, y, r / 2, 0, 7); ctx.fill(); ctx.beginPath(); ctx.moveTo(x - r, y + 1); ctx.lineTo(x, y + r * 1.2); ctx.lineTo(x + r, y + 1); ctx.fill(); }
+
+/* ---- Pared ---- */
+const SKY = Array.from({ length:14 }, (_, k) => ({ w:rand(18, 34), h:rand(30, 90), lit:Array.from({ length:12 }, () => Math.random() < .5) }));
+const STARS = Array.from({ length:30 }, () => ({ x:Math.random(), y:Math.random(), s:rand(.6, 1.5) }));
+function skyMode(){ const d = new Date(), h = d.getHours() + d.getMinutes() / 60; return { h, mode:(h >= 6.5 && h < 17.5) ? 'day' : ((h >= 5.5 && h < 6.5) || (h >= 17.5 && h < 18.8)) ? 'dusk' : 'night' }; }
+function drawWindow(x, y, w, h, t){
+  const { h:hr, mode } = skyMode();
+  const top = mode === 'day' ? '#7CC6EE' : mode === 'dusk' ? '#F08C5A' : '#0B1532', bot = mode === 'day' ? '#D6F1FF' : mode === 'dusk' ? '#FFD08E' : '#253669';
+  ctx.save(); rr(x, y, w, h, 4); ctx.clip();
+  const g = ctx.createLinearGradient(0, y, 0, y + h); g.addColorStop(0, top); g.addColorStop(1, bot); ctx.fillStyle = g; ctx.fillRect(x, y, w, h);
+  if (mode === 'night') { ctx.fillStyle = '#FFFFFF'; STARS.forEach(s => { ctx.globalAlpha = .4 + .5 * Math.sin(t * 2 + s.x * 40); ctx.fillRect(x + s.x * w, y + s.y * h * .5, s.s, s.s); }); ctx.globalAlpha = 1; circ(x + w * .85, y + 26, 10, '#F1EECB'); circ(x + w * .85 + 5, y + 22, 9, top); }
+  else { const k = clamp((hr - 6) / 12, 0, 1); circ(x + w * (.1 + .8 * k), y + h * (.5 - .35 * Math.sin(k * Math.PI)), 12, mode === 'day' ? '#FFD84A' : '#FFAE48'); }
+  ctx.fillStyle = mode === 'night' ? '#162544' : mode === 'dusk' ? '#8C5B63' : '#6FA77D';
+  ctx.beginPath(); ctx.moveTo(x, y + h); ctx.lineTo(x, y + h * .6); ctx.lineTo(x + w * .25, y + h * .38); ctx.lineTo(x + w * .5, y + h * .55); ctx.lineTo(x + w * .75, y + h * .33); ctx.lineTo(x + w, y + h * .5); ctx.lineTo(x + w, y + h); ctx.fill();
+  let bx = x - 6;
+  SKY.forEach((b, k) => { if (bx > x + w) return; const by = y + h - b.h; ctx.fillStyle = mode === 'night' ? '#1E2A3F' : mode === 'dusk' ? '#6B4B52' : ['#9FB6C3', '#B8C7CF', '#8EA6B4'][k % 3]; ctx.fillRect(bx, by, b.w, b.h);
+    ctx.fillStyle = mode === 'night' ? '#FFD86B' : 'rgba(255,255,255,.55)'; b.lit.forEach((on, j) => { if (on && (mode !== 'day' || j % 2)) { const cx = bx + 4 + (j % 2) * (b.w / 2), cy = by + 6 + Math.floor(j / 2) * 10; if (cy < y + h - 4) ctx.fillRect(cx, cy, 4, 5); } }); bx += b.w + 3; });
+  ctx.restore();
+  ctx.lineWidth = 6; ctx.strokeStyle = P.trim; rr(x, y, w, h, 4); ctx.stroke();
+  ctx.lineWidth = 3; ctx.beginPath(); for (let k = 1; k < 3; k++) { ctx.moveTo(x + w * k / 3, y); ctx.lineTo(x + w * k / 3, y + h); } ctx.stroke();
+}
+function drawWall(t){
+  const g = ctx.createLinearGradient(0, 0, 0, 240); g.addColorStop(0, P.wallTop); g.addColorStop(1, P.wall);
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, 242);
+  ctx.fillStyle = P.trim; ctx.fillRect(0, 236, W, 8);
+  // puerta
+  boxf(28, 82, 96, 158, '#2C3E48', 4); boxf(36, 90, 80, 150, P.glass, 2, 1.5); ctx.fillStyle = 'rgba(255,255,255,.25)'; ctx.fillRect(44, 98, 8, 120); circ(106, 168, 4, '#F2A93B');
+  txt('ENTRADA', 76, 66, FM(700, 11), P.label);
+  if (leadAtDoor) { const b = Math.sin(t * 6) * 3; boxf(56, 122 + b, 40, 50, '#FFFFFF', 4, 1.5); ctx.fillStyle = '#0E9F7E'; ctx.fillRect(62, 130 + b, 28, 4); ctx.fillStyle = '#B9C4C9'; [140, 147, 154].forEach(y => ctx.fillRect(62, y + b, 26, 3)); glow(76, 150, 60, 'rgba(242,169,59,.45)'); txt('NUEVO CLIENTE', 76, 190 + b, FM(700, 10), '#E8604F'); }
+  // ventanas
+  drawWindow(222, 46, 320, 160, t);
+  // pantalla de proyecto
+  drawBoard(574, 26, t);
+  drawClock(1056, 92);
+  // sala de juntas: pared de vidrio y letrero
+  ctx.fillStyle = P.glass; ctx.fillRect(1134, 26, 252, 210); ctx.strokeStyle = P.trim; ctx.lineWidth = 4; ctx.strokeRect(1134, 26, 252, 210);
+  for (let k = 1; k < 3; k++) { ctx.beginPath(); ctx.moveTo(1134 + k * 84, 26); ctx.lineTo(1134 + k * 84, 236); ctx.stroke(); }
+  drawNeon(1260, 70, t);
+  // tablero de post-its
+  boxf(1166, 116, 188, 92, '#FFFFFF', 4, 1.5);
+  const colsN = ['#FFE07A', '#A6E3CF', '#F8B4C3', '#B9D4FF'];
+  for (let k = 0; k < 12; k++) { const x = 1176 + (k % 6) * 29, y = 126 + Math.floor(k / 6) * 38; ctx.save(); ctx.translate(x + 11, y + 13); ctx.rotate(((k * 37) % 7 - 3) * .02); ctx.fillStyle = colsN[k % 4]; ctx.fillRect(-11, -13, 22, 26); ctx.fillStyle = 'rgba(0,0,0,.25)'; ctx.fillRect(-7, -6, 12, 2); ctx.fillRect(-7, -1, 9, 2); ctx.restore(); }
+  txt('SALA DE JUNTAS', 1260, 222, FM(700, 10.5), P.label);
+  // lámparas
+  const night = skyMode().mode === 'night';
+  [380, 760, 1040].forEach(x => { ctx.strokeStyle = P.out; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, 12); ctx.stroke(); ctx.fillStyle = '#10202B'; ctx.beginPath(); ctx.ellipse(x, 16, 22, 6, 0, Math.PI, 0); ctx.fill(); circ(x, 17, 4, '#FFE7A8'); if (night) glow(x, 30, 110, 'rgba(255,225,160,.16)', 1.8); });
+}
+function drawNeon(cx, cy, t){
+  const name = company().toUpperCase().slice(0, 18);
+  ctx.font = FD(800, 26); const w = Math.min(232, ctx.measureText(name).width + 24);
+  boxf(cx - w / 2, cy - 22, w, 44, '#0B1418', 8, 2);
+  const flick = Math.sin(t * 13) > .97 ? .55 : 1;
+  ctx.save(); ctx.shadowColor = '#2DD4A7'; ctx.shadowBlur = 14 * flick; ctx.globalAlpha = flick;
+  const fs = Math.min(26, 26 * (w - 24) / Math.max(1, ctx.measureText(name).width));
+  txt(name, cx, cy + 1, FD(800, fs), '#7FF5D2'); ctx.restore();
+}
+function drawClock(cx, cy){
+  const d = new Date(), r = 30;
+  circ(cx, cy, r, '#FFFFFF', '#10202B', 4);
+  ctx.strokeStyle = '#10202B'; ctx.lineWidth = 1.5;
+  for (let k = 0; k < 12; k++) { const a = k / 12 * Math.PI * 2, l = k % 3 ? 3 : 7; ctx.beginPath(); ctx.moveTo(cx + Math.sin(a) * (r - 4), cy - Math.cos(a) * (r - 4)); ctx.lineTo(cx + Math.sin(a) * (r - 4 - l), cy - Math.cos(a) * (r - 4 - l)); ctx.stroke(); }
+  const hh = (d.getHours() % 12 + d.getMinutes() / 60) / 12 * Math.PI * 2, mm = (d.getMinutes() + d.getSeconds() / 60) / 60 * Math.PI * 2, ss = (d.getSeconds() + d.getMilliseconds() / 1000) / 60 * Math.PI * 2;
+  const hand = (a, l, w, c) => { ctx.strokeStyle = c; ctx.lineWidth = w; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(cx + Math.sin(a) * l, cy - Math.cos(a) * l); ctx.stroke(); };
+  hand(hh, 14, 4, '#10202B'); hand(mm, 21, 2.5, '#10202B'); hand(ss, 24, 1.2, '#E8604F'); ctx.lineCap = 'butt'; circ(cx, cy, 2.5, '#10202B');
+  txt(d.toLocaleTimeString('es-CO', { hour:'numeric', minute:'2-digit' }), cx, cy + r + 14, FM(700, 12), P.label);
+  txt(d.toLocaleDateString('es-CO', { weekday:'long', day:'numeric', month:'short' }), cx, cy + r + 30, FB(600, 11), P.label);
+}
+function drawBoard(x, y, t){
+  const w = 420, h = 196;
+  boxf(x - 8, y - 6, w + 16, h + 12, '#0B1418', 10, 2);
+  const g = ctx.createLinearGradient(0, y, 0, y + h); g.addColorStop(0, '#12252E'); g.addColorStop(1, '#0D1A20'); ctx.fillStyle = g; rr(x, y, w, h, 6); ctx.fill();
+  ctx.fillStyle = 'rgba(255,255,255,.04)'; for (let k = 0; k < h; k += 4) ctx.fillRect(x, y + k, w, 1);
+  txt(`PROYECTO #${pad3(projNo)}`, x + 14, y + 18, FM(700, 15), '#E5EEF0', 'left');
+  const doneN = D.filter(d => ['done', 'edited', 'example'].includes(d.status)).length;
+  const tag = isExample ? 'EJEMPLO' : `${doneN}/10`;
+  ctx.font = FM(700, 10.5); const tw = ctx.measureText(tag).width + 14;
+  rr(x + w - tw - 12, y + 9, tw, 18, 9); ctx.fillStyle = isExample ? '#F2A93B' : '#2DD4A7'; ctx.fill();
+  txt(tag, x + w - 12 - tw / 2, y + 18.5, FM(700, 10.5), '#10202B');
+  const kpi = [['SEMANAS', PJ.semanas ? String(PJ.semanas) : '—'], ['HORAS DEV', PJ.horas ? String(PJ.horas) : '—'], ['TOTAL CON IVA', PJ.total ? '$' + fmt(PJ.total) : '—']];
+  kpi.forEach(([k, v], i) => { const kx = x + 14 + [0, 96, 196][i]; txt(v, kx, y + 50, FD(800, 22), i === 2 ? '#7FF5D2' : '#E5EEF0', 'left'); txt(k, kx, y + 70, FM(700, 9), 'rgba(229,238,240,.55)', 'left'); });
+  if (celebrateUntil > now()) { const k = Math.sin(t * 8) * .5 + .5; ctx.fillStyle = `rgba(45,212,167,${.75 + .25 * k})`; rr(x + 14, y + 86, w - 28, 98, 8); ctx.fill(); txt('¡PROYECTO APROBADO!', x + w / 2, y + 128, FD(800, 28), '#0B1418'); txt('Todo el equipo a la sala de juntas', x + w / 2, y + 156, FB(600, 13), '#0B1418'); return; }
+  AG.forEach((a, i) => {
+    const col = i < 5 ? 0 : 1, row = i % 5, rx = x + 14 + col * 204, ry = y + 94 + row * 19, d = D[i];
+    circ(rx + 5, ry, 5, a.color);
+    txt(a.name, rx + 15, ry, FB(600, 11.5), '#E5EEF0', 'left');
+    txt(a.role.split(' ')[0].toUpperCase().slice(0, 9), rx + 66, ry, FM(500, 8.5), 'rgba(229,238,240,.5)', 'left');
+    let pct = 0; if (['done', 'edited', 'example'].includes(d.status)) pct = 1; else if (d.status === 'writing') pct = Math.min(.95, .1 + d.text.length / 700); else if (d.status === 'thinking') pct = .06; else if (d.status === 'stopped' || d.status === 'error') pct = Math.min(.95, d.text.length / 700);
+    rr(rx + 122, ry - 3, 56, 6, 3); ctx.fillStyle = 'rgba(229,238,240,.14)'; ctx.fill();
+    if (pct > 0) { rr(rx + 122, ry - 3, Math.max(6, 56 * pct), 6, 3); ctx.fillStyle = d.status === 'error' || d.status === 'stopped' ? '#F07A69' : a.color; ctx.fill(); }
+    if (d.status === 'writing' || d.status === 'thinking') circ(rx + 186, ry, 2.5 + Math.sin(t * 8) * 1, '#2DD4A7');
+  });
+}
+
+/* ---- Piso ---- */
+function drawFloor(){
+  const g = ctx.createLinearGradient(0, 244, 0, H); g.addColorStop(0, P.floorB); g.addColorStop(1, P.floorA);
+  ctx.fillStyle = g; ctx.fillRect(0, 244, W, H - 244);
+  ctx.strokeStyle = P.plank; ctx.lineWidth = 1;
+  let y = 256, step = 12; while (y < H) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); step *= 1.12; y += step; }
+  for (let k = -16; k <= 16; k++) { ctx.beginPath(); ctx.moveTo(700 + k * 50, 244); ctx.lineTo(700 + k * 96, H); ctx.stroke(); }
+  ctx.fillStyle = P.rug; rr(1158, 360, 222, 196, 18); ctx.fill();
+  ctx.fillStyle = P.rug2; rr(300, 690, 270, 116, 30); ctx.fill();
+}
+
+/* ---- Escritorios y pantallas ---- */
+function screen(i, sx, sy, sw, sh, t){
+  const st = ST[i], a = AG[i], act = st.active, done = st.done, k = act ? clamp((now() - st.start) / MIN_WORK, 0, 1) : done ? 1 : 0;
+  ctx.save(); rr(sx, sy, sw, sh, 3); ctx.clip();
+  ctx.fillStyle = act || done ? '#0F1E25' : P.screenOff; ctx.fillRect(sx, sy, sw, sh);
+  if (!act && !done) { txt('zZ', sx + sw / 2, sy + sh / 2, FM(700, 11), 'rgba(160,190,200,.35)'); ctx.restore(); return; }
+  const c = a.color;
+  switch (i) {
+    case 0: for (let j = 0; j < 3; j++) { const bw = (sw - 12) * (1 - j * .28) * Math.min(1, k * 1.5 - j * .2); if (bw > 0) { ctx.fillStyle = ['#F2A93B', '#2DD4A7', '#7FB3FF'][j]; ctx.fillRect(sx + (sw - bw) / 2, sy + 6 + j * 10, bw, 7); } } txt('CRM', sx + 6, sy + sh - 6, FM(700, 7), 'rgba(229,238,240,.6)', 'left'); break;
+    case 1: for (let j = 0; j < 5; j++) { const bw = (14 + j * 3) * Math.min(1, k * 1.6 - j * .15); if (bw > 0) { ctx.fillStyle = j % 2 ? '#7FB3FF' : c; ctx.fillRect(sx + 4 + j * 9, sy + 5 + j * 7, bw, 5); } } break;
+    case 2: { const nodes = [[sx + 10, sy + 12], [sx + sw / 2, sy + sh - 10], [sx + sw - 10, sy + 12]]; ctx.strokeStyle = 'rgba(180,160,255,.7)'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(...nodes[0]); ctx.lineTo(...nodes[1]); ctx.lineTo(...nodes[2]); ctx.stroke(); nodes.forEach((n, j) => circ(n[0], n[1], 5, ['#2DD4A7', '#B49BFF', '#F2A93B'][j])); if (act) { const q = (t * .8) % 1, seg = q < .5 ? 0 : 1, f = (q % .5) * 2, A = nodes[seg], B = nodes[seg + 1]; circ(A[0] + (B[0] - A[0]) * f, A[1] + (B[1] - A[1]) * f, 2.5, '#FFFFFF'); } break; }
+    case 3: { ctx.strokeStyle = '#F8B4C3'; ctx.lineWidth = 1.5; const n = Math.ceil(k * 4); for (let j = 0; j < n; j++) ctx.strokeRect(sx + 5 + (j % 2) * (sw / 2 - 2), sy + 5 + Math.floor(j / 2) * (sh / 2 - 3), sw / 2 - 8, sh / 2 - 8); ['#E8607E', '#F2A93B', '#2DD4A7'].forEach((cc, j) => circ(sx + sw - 8, sy + 8 + j * 9, 3, cc)); break; }
+    case 4: { const off = act ? (t * 18) % 8 : 0; for (let j = 0; j < 7; j++) { const yy = sy + 4 + j * 6 - off; ctx.fillStyle = ['#2DD4A7', '#7FB3FF', '#F2A93B', '#E5EEF0'][(j + Math.floor(t * (act ? 2 : 0))) % 4]; ctx.fillRect(sx + 4 + (j % 3) * 4, yy, 12 + ((j * 17) % 26), 3); } break; }
+    case 5: for (let j = 0; j < 4; j++) { ctx.fillStyle = 'rgba(229,238,240,.25)'; ctx.fillRect(sx + 16, sy + 6 + j * 9, sw - 24, 3); if (k * 4 > j) { ctx.strokeStyle = '#2DD4A7'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(sx + 5, sy + 7 + j * 9); ctx.lineTo(sx + 8, sy + 10 + j * 9); ctx.lineTo(sx + 13, sy + 4 + j * 9); ctx.stroke(); } else circ(sx + 9, sy + 7 + j * 9, 2.5, '#F07A69'); } break;
+    case 6: { ctx.strokeStyle = 'rgba(229,238,240,.25)'; ctx.lineWidth = 1; for (let j = 0; j <= 4; j++) { ctx.beginPath(); ctx.moveTo(sx, sy + j * sh / 4); ctx.lineTo(sx + sw, sy + j * sh / 4); ctx.stroke(); } for (let j = 0; j <= 3; j++) { ctx.beginPath(); ctx.moveTo(sx + j * sw / 3, sy); ctx.lineTo(sx + j * sw / 3, sy + sh); ctx.stroke(); } const cells = Math.floor(k * 12); for (let j = 0; j < cells; j++) { ctx.fillStyle = j % 3 === 2 ? '#2DD4A7' : '#A6E3CF'; ctx.fillRect(sx + 3 + (j % 3) * sw / 3, sy + 3 + Math.floor(j / 3) * sh / 4, sw / 3 - 8, 3); } break; }
+    case 7: { ctx.fillStyle = '#F7F3EC'; ctx.fillRect(sx + 10, sy + 3, sw - 20, sh - 6); ctx.fillStyle = '#B9C4C9'; for (let j = 0; j < 4; j++) ctx.fillRect(sx + 14, sy + 8 + j * 6, sw - 30, 2); ctx.strokeStyle = '#3E7FD9'; ctx.lineWidth = 1.5; ctx.beginPath(); const n = Math.floor(k * 14); for (let j = 0; j <= n; j++) { const xx = sx + 16 + j * 2.2, yy = sy + sh - 10 + Math.sin(j * 1.3) * 3; j ? ctx.lineTo(xx, yy) : ctx.moveTo(xx, yy); } ctx.stroke(); break; }
+    case 8: { ctx.fillStyle = '#F7F3EC'; ctx.fillRect(sx + 8, sy + 3, sw - 16, sh - 6); ctx.fillStyle = '#D64FA6'; ctx.fillRect(sx + 12, sy + 7, sw - 24, sh / 2 - 6); heart(sx + sw - 16, sy + sh - 11, 4 + (act ? Math.sin(t * 8) : 0), '#E8604F'); ctx.fillStyle = '#B9C4C9'; ctx.fillRect(sx + 12, sy + sh / 2 + 4, 22, 2); break; }
+    case 9: { ctx.strokeStyle = 'rgba(229,238,240,.2)'; ctx.lineWidth = 1; for (let j = 1; j < 4; j++) { ctx.beginPath(); ctx.moveTo(sx, sy + j * sh / 4); ctx.lineTo(sx + sw, sy + j * sh / 4); ctx.stroke(); } const n = Math.max(2, Math.floor(k * 9)); ctx.strokeStyle = '#2DD4A7'; ctx.lineWidth = 2; ctx.beginPath(); for (let j = 0; j < n; j++) { const xx = sx + 4 + j * (sw - 8) / 8, yy = sy + sh - 6 - j * (sh - 12) / 8 - Math.sin(j * 1.7) * 3; j ? ctx.lineTo(xx, yy) : ctx.moveTo(xx, yy); } ctx.stroke(); break; }
+  }
+  if (done && !act) { circ(sx + sw - 7, sy + 7, 5.5, '#2DD4A7'); ctx.strokeStyle = '#0B1418'; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(sx + sw - 10, sy + 7); ctx.lineTo(sx + sw - 8, sy + 9.5); ctx.lineTo(sx + sw - 4, sy + 4.5); ctx.stroke(); }
+  ctx.restore();
+}
+function drawChair(i){ const s = DESK[i].spot; boxf(s.x - 17, s.y - 72, 34, 40, P.chair, 8, 1.5); ctx.fillStyle = 'rgba(255,255,255,.08)'; ctx.fillRect(s.x - 12, s.y - 66, 24, 4); }
+function drawDesk(i, t){
+  const d = DESK[i], a = AG[i], st = ST[i], top = d.y - 46, base = d.y + d.h;
+  if (st.active) glow(d.cx, base - 4, d.w * .7, 'rgba(45,212,167,.45)', .22);
+  boxf(d.x + 6, top + 12, 6, base - top - 12, P.leg, 2, 1.2); boxf(d.x + d.w - 12, top + 12, 6, base - top - 12, P.leg, 2, 1.2);
+  boxf(d.x + 18, top + 12, d.w - 36, 36, P.deskFront, 3, 1.5);
+  ctx.fillStyle = a.color; ctx.fillRect(d.x + 18, top + 44, d.w - 36, 4);
+  boxf(d.x - 4, top, d.w + 8, 13, P.deskTop, 4, 2);
+  // monitor
+  const mx = d.x + 10, mw = i === 9 ? 84 : 70, mh = 46, my = top - mh - 10;
+  if (st.active) glow(mx + mw / 2, my + mh / 2, 60, 'rgba(45,212,167,.25)');
+  boxf(mx + mw / 2 - 4, my + mh, 8, 10, P.leg, 1, 1); boxf(mx + mw / 2 - 14, top - 3, 28, 4, P.leg, 2, 1);
+  boxf(mx, my, mw, mh, '#0B1418', 5, 2);
+  screen(i, mx + 4, my + 4, mw - 8, mh - 8, t);
+  // accesorios
+  const rx = d.x + d.w - 30;
+  switch (i) {
+    case 0: { const ring = st.active && Math.floor(t * 5) % 2 === 0, sh = ring ? Math.sin(t * 60) * 1.5 : 0; boxf(rx - 4 + sh, top - 10, 24, 10, '#E8604F', 4, 1.5); if (ring) { ctx.strokeStyle = '#E8604F'; ctx.lineWidth = 1.5; [7, 12].forEach(r => { ctx.beginPath(); ctx.arc(rx + 8, top - 10, r, -2.6, -.5); ctx.stroke(); }); } break; }
+    case 1: ['#FFE07A', '#A6E3CF', '#F8B4C3'].forEach((c, k) => { ctx.fillStyle = c; ctx.fillRect(rx - 10 + k * 10, top - 9 - (k % 2) * 3, 9, 9); }); break;
+    case 2: circ(rx + 8, top - 14, 9, P.plant); boxf(rx, top - 8, 16, 9, P.pot, 2, 1.2); break;
+    case 3: boxf(rx - 8, top - 6, 30, 6, '#10202B', 2, 1); ctx.strokeStyle = '#E8607E'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(rx + 20, top - 18 + (st.active ? Math.sin(t * 9) * 3 : 0)); ctx.lineTo(rx + 12, top - 7); ctx.stroke(); break;
+    case 4: { boxf(rx - 2, top - 14, 14, 14, '#FFFFFF', 3, 1.5); ctx.strokeStyle = 'rgba(200,200,200,.6)'; ctx.lineWidth = 1.2; ctx.beginPath(); for (let j = 0; j <= 8; j++) { const yy = top - 18 - j * 2, xx = rx + 5 + Math.sin(t * 3 + j * .7) * 2; j ? ctx.lineTo(xx, yy) : ctx.moveTo(xx, yy); } ctx.stroke(); boxf(rx - 50, top - 5, 36, 5, '#2C3E48', 2, 1); break; }
+    case 5: circ(rx + 6, top - 12, 8, 'rgba(160,210,230,.5)', P.out, 2); ctx.strokeStyle = P.out; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(rx + 12, top - 6); ctx.lineTo(rx + 18, top); ctx.stroke(); break;
+    case 6: { boxf(rx - 6, top - 22, 24, 22, '#2C3E48', 3, 1.5); ctx.fillStyle = '#A6E3CF'; ctx.fillRect(rx - 3, top - 19, 18, 5); for (let k = 0; k < 6; k++) { const on = st.active && Math.floor(t * 8 + k) % 6 === 0; ctx.fillStyle = on ? '#F2A93B' : '#C9D3D7'; ctx.fillRect(rx - 3 + (k % 3) * 6.5, top - 12 + Math.floor(k / 3) * 5, 4.5, 3.5); } break; }
+    case 7: { const up = st.active ? Math.abs(Math.sin(t * 4)) * 12 : 0; boxf(rx - 14, top - 5, 22, 5, '#F7F3EC', 1, 1); boxf(rx + 4, top - 22 - up, 12, 10, '#6B7A3A', 2, 1.2); boxf(rx + 1, top - 12 - up, 18, 7, '#E8604F', 2, 1.2); break; }
+    case 8: { ctx.fillStyle = '#D64FA6'; ctx.beginPath(); ctx.moveTo(rx - 4, top - 12); ctx.lineTo(rx + 16, top - 20); ctx.lineTo(rx + 16, top - 2); ctx.closePath(); ctx.fill(); ctx.strokeStyle = P.out; ctx.lineWidth = 1.5; ctx.stroke(); if (st.active && Math.random() < .07) particles.push({ kind:'heart', x:mx + rand(10, mw - 10), y:my, vx:rand(-8, 8), vy:-38, life:1.8, max:1.8, r:rand(4, 6) }); break; }
+    case 9: { ctx.fillStyle = '#F2A93B'; ctx.beginPath(); ctx.moveTo(rx, top - 24); ctx.lineTo(rx + 16, top - 24); ctx.lineTo(rx + 12, top - 12); ctx.lineTo(rx + 4, top - 12); ctx.closePath(); ctx.fill(); ctx.strokeStyle = P.out; ctx.lineWidth = 1.2; ctx.stroke(); ctx.fillRect(rx + 6, top - 12, 4, 6); boxf(rx + 1, top - 6, 14, 6, '#10202B', 1, 1); boxf(d.x + d.w / 2 - 18, top + 18, 36, 12, '#10202B', 2, 1); txt('CEO', d.x + d.w / 2, top + 24.5, FM(700, 8.5), '#F2A93B'); break; }
+  }
+}
+
+/* ---- Muebles ---- */
+function drawRack(t){ const f = FURN.rack; boxf(f.x, 120, f.w, 160, '#14232B', 4); for (let k = 0; k < 8; k++) { const y = 130 + k * 18; ctx.fillStyle = '#22343D'; ctx.fillRect(f.x + 6, y, f.w - 12, 13); circ(f.x + 12, y + 6.5, 2, Math.sin(t * 6 + k * 1.7) > 0 ? '#2DD4A7' : '#0E5E4C'); circ(f.x + 19, y + 6.5, 2, Math.sin(t * 9 + k) > .6 ? '#F2A93B' : '#5A4A2A'); } txt('SERVIDOR', f.x + f.w / 2, 112, FM(700, 9), P.label); }
+function drawAgua(){ const f = FURN.agua; boxf(f.x + 4, 210, f.w - 8, 68, '#E9EEF0', 4, 1.5); boxf(f.x + 6, 168, f.w - 12, 42, 'rgba(120,190,235,.75)', 10, 1.5); }
+function drawCafe(t){
+  const f = FURN.cafe, top = f.y - 40;
+  boxf(f.x, top + 12, f.w, f.y + f.h - top - 12, P.wood, 4); boxf(f.x - 4, top, f.w + 8, 14, P.deskTop, 4);
+  boxf(f.x + 18, top - 44, 40, 44, '#24323A', 5); boxf(f.x + 28, top - 18, 20, 16, '#3B2A20', 2, 1);
+  ctx.strokeStyle = 'rgba(255,255,255,.55)'; ctx.lineWidth = 1.5; ctx.beginPath(); for (let j = 0; j <= 10; j++) { const yy = top - 48 - j * 2.2, xx = f.x + 38 + Math.sin(t * 3 + j * .6) * 3; j ? ctx.lineTo(xx, yy) : ctx.moveTo(xx, yy); } ctx.stroke();
+  [90, 108, 126].forEach((x, k) => boxf(f.x + x, top - 12, 12, 12, ['#F2A93B', '#2DD4A7', '#E8604F'][k], 3, 1.2));
+  boxf(f.x + 150, top - 28, 40, 28, '#F7F3EC', 4, 1.5); ctx.fillStyle = '#F2A93B'; [0, 1, 2].forEach(k => { ctx.beginPath(); ctx.ellipse(f.x + 160 + k * 10, top - 8, 5, 3.5, 0, 0, 7); ctx.fill(); });
+  txt('CAFETERÍA', f.x + f.w / 2, f.y + 18, FM(700, 10), shade('#F7F3EC', 1));
+}
+function drawSofa(){ const f = FURN.sofa; boxf(f.x, f.y - 46, f.w, 38, P.sofa, 14); boxf(f.x - 10, f.y - 16, f.w + 20, 26, shade('#3E7FD9', .85), 10); boxf(f.x - 14, f.y - 34, 20, 44, P.sofa, 8); boxf(f.x + f.w - 6, f.y - 34, 20, 44, P.sofa, 8); boxf(f.x + 30, f.y - 38, 34, 22, '#F2A93B', 6, 1.5); boxf(f.x + f.w - 64, f.y - 38, 34, 22, '#2DD4A7', 6, 1.5); boxf(f.x + 10, f.y + 10, 8, 10, P.leg, 2, 1); boxf(f.x + f.w - 18, f.y + 10, 8, 10, P.leg, 2, 1); }
+function drawPing(t){
+  const f = FURN.ping, top = f.y - 16;
+  boxf(f.x + 10, top + 10, 8, f.y + f.h - top - 10, P.leg, 2, 1.2); boxf(f.x + f.w - 18, top + 10, 8, f.y + f.h - top - 10, P.leg, 2, 1.2);
+  boxf(f.x, top, f.w, 14, '#1E6E52', 3); ctx.fillStyle = '#FFFFFF'; ctx.fillRect(f.x + f.w / 2 - 1, top - 10, 2, 12); ctx.fillRect(f.x + 2, top + 1, f.w - 4, 1.5);
+  ctx.fillStyle = 'rgba(255,255,255,.7)'; ctx.fillRect(f.x + f.w / 2 - 30, top - 9, 60, 1);
+  const L = AG.find(a => a.at === 'pingL' && !a.path.length), R = AG.find(a => a.at === 'pingR' && !a.path.length);
+  if (L || R) { const q = (t * (L && R ? .9 : .5)) % 1, dir = Math.floor(t * (L && R ? .9 : .5)) % 2; const f2 = dir ? 1 - q : q; const bx = f.x + 6 + f2 * (f.w - 12), by = top - 6 - Math.abs(Math.sin(f2 * Math.PI * 2)) * 26; circ(bx, by, 3.5, '#FFFFFF', P.out, 1); }
+}
+function drawPrint(t){ const f = FURN.print, top = f.y - 34; boxf(f.x, top, f.w, f.y + f.h - top, '#E9EEF0', 5); boxf(f.x + 8, top + 6, f.w - 16, 8, '#24323A', 2, 1); const busy = AG.some(a => a.at === 'print' && !a.path.length); const out = busy ? (t * 18) % 22 : 6; boxf(f.x + 14, top - out + 2, f.w - 28, out + 2, '#FFFFFF', 1, 1); circ(f.x + f.w - 10, top + 24, 3, busy ? '#2DD4A7' : '#7D8A90'); }
+function drawCabina(){ const f = FURN.cabina; boxf(f.x, f.y - 120, f.w, f.y + f.h - (f.y - 120), '#2C3E48', 8); boxf(f.x + 8, f.y - 108, f.w - 16, 120, P.glass, 4, 1.5); ctx.fillStyle = 'rgba(255,255,255,.2)'; ctx.fillRect(f.x + 14, f.y - 100, 5, 90); txt('CABINA', f.x + f.w / 2, f.y - 128, FM(700, 9.5), P.label); }
+function drawMesa(){
+  const f = FURN.mesa, top = f.y - 14;
+  ctx.fillStyle = P.shadow; ctx.beginPath(); ctx.ellipse(f.x + f.w / 2, f.y + f.h, f.w / 2 + 6, 8, 0, 0, 7); ctx.fill();
+  boxf(f.x + 20, top + 12, 10, f.y + f.h - top - 12, P.leg, 2, 1.2); boxf(f.x + f.w - 30, top + 12, 10, f.y + f.h - top - 12, P.leg, 2, 1.2);
+  boxf(f.x - 8, top, f.w + 16, 16, P.deskTop, 8, 2);
+  boxf(f.x + 30, top - 18, 34, 18, '#10202B', 3, 1.5); ctx.fillStyle = '#2DD4A7'; ctx.fillRect(f.x + 34, top - 14, 26, 10);
+  boxf(f.x + 100, top - 10, 12, 10, '#FFFFFF', 3, 1);
+}
+function drawMatera(){ const f = FURN.matera; [[0, -40, 16], [-12, -28, 13], [12, -28, 13], [0, -56, 11]].forEach(([dx, dy, r]) => circ(f.x + f.w / 2 + dx, f.y + dy, r, P.plant)); boxf(f.x + 2, f.y - 18, f.w - 4, f.h + 16, P.pot, 4); }
+
+/* ---- Personas ---- */
+function drawPerson(a, t){
+  const moving = a.path.length > 0, tn = now();
+  const jump = a.jumpUntil > tn ? Math.abs(Math.sin(t * 7 + a.seed)) * 26 : 0;
+  const step = moving ? Math.sin(a.phase) : 0;
+  const bob = moving ? Math.abs(step) * 2.5 : Math.sin(t * 2 + a.seed) * .8;
+  const x = a.x, y = a.y - jump;
+  const sy = moving ? 1 - Math.abs(step) * .04 : 1 + Math.sin(t * 2 + a.seed) * .012;
+  ctx.fillStyle = P.shadow; ctx.beginPath(); ctx.ellipse(a.x, a.y + 1, 17 * (1 - jump / 80), 5, 0, 0, Math.PI * 2); ctx.fill();
+  const legC = shade(a.color, .45);
+  ctx.lineCap = 'round'; ctx.strokeStyle = a.look === 'ceo' || a.look === 'legal' ? '#22303A' : '#2F4A6B'; ctx.lineWidth = 6;
+  const sw = step * 7 + (jump ? 3 : 0);
+  ctx.beginPath(); ctx.moveTo(x - 7, y - 20); ctx.lineTo(x - 7 + sw, y - 4); ctx.moveTo(x + 7, y - 20); ctx.lineTo(x + 7 - sw, y - 4); ctx.stroke();
+  ctx.fillStyle = legC; ctx.lineWidth = 1.2; ctx.strokeStyle = P.out;
+  ctx.beginPath(); ctx.ellipse(x - 7 + sw + a.facing * 2.5, y - 2.5, 6, 3.6, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+  ctx.beginPath(); ctx.ellipse(x + 7 - sw + a.facing * 2.5, y - 2.5, 6, 3.6, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+  const cy = y - 42 - bob, R = 22;
+  ctx.save(); ctx.translate(x, cy); ctx.scale(1 / Math.sqrt(sy), sy); ctx.translate(-x, -cy);
+  const arm = moving ? step * 5 : a.working ? Math.sin(t * 14) * 4 : jump ? -10 : 0;
+  const handC = shade(a.color, 1.15);
+  circ(x - R - 2, cy + 8 - arm, 6, handC, P.out); circ(x + R + 2, cy + 8 + arm, 6, handC, P.out);
+  const g = ctx.createRadialGradient(x - 8, cy - 10, 3, x, cy, R + 4); g.addColorStop(0, shade(a.color, 1.32)); g.addColorStop(1, a.color);
+  circ(x, cy, R, g); ctx.lineWidth = 2.2; ctx.strokeStyle = P.out; ctx.stroke();
+  ctx.save(); ctx.beginPath(); ctx.arc(x, cy, R - 1, 0, Math.PI * 2); ctx.clip();
+  drawOutfit(a, x, cy);
+  ctx.restore();
+  ctx.fillStyle = 'rgba(255,255,255,.28)'; ctx.beginPath(); ctx.ellipse(x - 8, cy - 11, 7, 4.5, -.5, 0, Math.PI * 2); ctx.fill();
+  const ex = a.facing * 3, ey = a.lookUp ? -3 : 0, blink = (t * 1000 + a.seed * 700) % 4300 > 4150;
+  ctx.fillStyle = 'rgba(255,120,120,.32)'; ctx.beginPath(); ctx.ellipse(x - 12 + ex * .5, cy + 3, 4, 2.5, 0, 0, Math.PI * 2); ctx.ellipse(x + 12 + ex * .5, cy + 3, 4, 2.5, 0, 0, Math.PI * 2); ctx.fill();
+  [-7, 7].forEach(o => {
+    if (blink) { ctx.strokeStyle = P.out; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(x + o + ex - 4, cy - 5); ctx.lineTo(x + o + ex + 4, cy - 5); ctx.stroke(); return; }
+    ctx.fillStyle = '#FFFFFF'; ctx.beginPath(); ctx.ellipse(x + o + ex * .6, cy - 5, 5, 6, 0, 0, Math.PI * 2); ctx.fill(); ctx.strokeStyle = 'rgba(0,0,0,.25)'; ctx.lineWidth = 1; ctx.stroke();
+    circ(x + o + ex, cy - 5 + ey, 2.6, '#0B1418'); circ(x + o + ex + .9, cy - 6.2 + ey, .9, '#FFFFFF');
+    ctx.strokeStyle = P.out; ctx.lineWidth = 1.8; ctx.beginPath(); ctx.moveTo(x + o + ex - 4, cy - 13 - (a.working ? 1 : 0)); ctx.lineTo(x + o + ex + 4, cy - 13 + (o < 0 ? 1 : -1) * (a.working ? 1 : 0)); ctx.stroke();
+  });
+  const talking = a.bubble && a.bubble.until > tn;
+  if (talking && Math.sin(t * 16) > 0) { ctx.fillStyle = '#5A1E12'; ctx.beginPath(); ctx.ellipse(x + ex * .6, cy + 8, 4, 3, 0, 0, Math.PI * 2); ctx.fill(); }
+  else { ctx.strokeStyle = P.out; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(x + ex * .6, cy + 4, 5.5, .2 * Math.PI, .8 * Math.PI); ctx.stroke(); }
+  drawLook(a, x, cy, t);
+  ctx.restore();
+  if (a.carry) { ctx.save(); ctx.translate(x + a.facing * 28, cy + 4); ctx.rotate(a.facing * .2); boxf(-10, -13, 20, 25, '#FFFFFF', 2, 1.5); ctx.fillStyle = a.color; ctx.fillRect(-7, -9, 14, 3); ctx.fillStyle = '#B9C4C9'; [-2, 3, 8].forEach(yy => ctx.fillRect(-7, yy, 12, 2)); ctx.restore(); }
+  ctx.lineCap = 'butt';
+  if (a.working) for (let k = 0; k < 3; k++) circ(x - 8 + k * 8, cy - R - 16 + Math.sin(t * 6 + k) * 2, 2.4, '#2DD4A7');
+}
+function drawOutfit(a, x, cy){
+  const L = a.look;
+  if (L === 'hoodie') { ctx.fillStyle = shade(a.color, .8); ctx.fillRect(x - 24, cy + 6, 48, 20); ctx.strokeStyle = '#FFFFFF'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(x - 4, cy + 8); ctx.lineTo(x - 4, cy + 18); ctx.moveTo(x + 4, cy + 8); ctx.lineTo(x + 4, cy + 18); ctx.stroke(); return; }
+  if (L === 'ceo' || L === 'legal') { ctx.fillStyle = L === 'ceo' ? '#16242E' : '#3A4520'; ctx.fillRect(x - 24, cy + 8, 48, 20); ctx.fillStyle = '#FFFFFF'; ctx.beginPath(); ctx.moveTo(x - 7, cy + 8); ctx.lineTo(x + 7, cy + 8); ctx.lineTo(x, cy + 22); ctx.fill();
+    if (L === 'ceo') { ctx.fillStyle = '#E8604F'; ctx.beginPath(); ctx.moveTo(x - 2.5, cy + 10); ctx.lineTo(x + 2.5, cy + 10); ctx.lineTo(x + 3.5, cy + 22); ctx.lineTo(x - 3.5, cy + 22); ctx.fill(); }
+    else { ctx.fillStyle = '#F2A93B'; ctx.beginPath(); ctx.moveTo(x, cy + 11); ctx.lineTo(x - 7, cy + 7); ctx.lineTo(x - 7, cy + 15); ctx.closePath(); ctx.moveTo(x, cy + 11); ctx.lineTo(x + 7, cy + 7); ctx.lineTo(x + 7, cy + 15); ctx.closePath(); ctx.fill(); }
+    return; }
+  ctx.fillStyle = 'rgba(255,255,255,.92)'; ctx.beginPath(); ctx.moveTo(x - 9, cy + 13); ctx.lineTo(x, cy + 19); ctx.lineTo(x + 9, cy + 13); ctx.lineTo(x + 9, cy + 16); ctx.lineTo(x, cy + 22); ctx.lineTo(x - 9, cy + 16); ctx.fill();
+  if (L === 'lanyard') { ctx.strokeStyle = '#2DD4A7'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(x - 8, cy + 6); ctx.lineTo(x, cy + 18); ctx.lineTo(x + 8, cy + 6); ctx.stroke(); ctx.fillStyle = '#FFFFFF'; ctx.fillRect(x - 4, cy + 17, 8, 7); }
+  if (L === 'qa') { ctx.fillStyle = '#F2A93B'; ctx.fillRect(x - 24, cy + 16, 48, 3); }
+}
+function drawLook(a, x, cy, t){
+  ctx.strokeStyle = P.out; ctx.lineWidth = 2;
+  switch (a.look) {
+    case 'headset':
+      ctx.lineWidth = 3.5; ctx.strokeStyle = '#10202B'; ctx.beginPath(); ctx.arc(x, cy, 25, Math.PI * 1.08, Math.PI * 1.92); ctx.stroke();
+      ctx.fillStyle = '#10202B'; rr(x - 27, cy - 7, 7, 14, 3); ctx.fill(); rr(x + 20, cy - 7, 7, 14, 3); ctx.fill();
+      ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(x + 23, cy + 5); ctx.quadraticCurveTo(x + 21, cy + 16, x + 9, cy + 14); ctx.stroke(); circ(x + 9, cy + 14, 2.6, '#E8604F'); break;
+    case 'lanyard':
+      ctx.fillStyle = '#10202B'; ctx.beginPath(); ctx.arc(x, cy - 6, 21, Math.PI * 1.08, Math.PI * 1.92); ctx.quadraticCurveTo(x + 6, cy - 22, x - 19, cy - 12); ctx.fill();
+      ctx.save(); ctx.translate(x - a.facing * 27, cy + 10); boxf(-9, -12, 18, 24, '#24323A', 3, 1.5); ctx.fillStyle = '#7FB3FF'; ctx.fillRect(-6, -9, 12, 16); ctx.restore(); break;
+    case 'glasses':
+      circ(x + a.facing * -2, cy - 24, 8, '#3A2A5A', P.out); ctx.fillStyle = '#3A2A5A'; ctx.beginPath(); ctx.arc(x, cy - 4, 21, Math.PI * 1.1, Math.PI * 1.9); ctx.quadraticCurveTo(x, cy - 16, x - 20, cy - 10); ctx.fill();
+      glassesRound(a, x, cy, '#10202B'); break;
+    case 'beret':
+      ctx.fillStyle = '#10202B'; ctx.beginPath(); ctx.ellipse(x - a.facing * 3, cy - 18, 21, 8, a.facing * -.15, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); circ(x - a.facing * 3, cy - 26, 3, '#10202B', P.out); break;
+    case 'hoodie':
+      ctx.strokeStyle = shade(a.color, .7); ctx.lineWidth = 6; ctx.beginPath(); ctx.arc(x, cy, 23, Math.PI * .85, Math.PI * 2.15); ctx.stroke();
+      ctx.lineWidth = 3.5; ctx.strokeStyle = '#10202B'; ctx.beginPath(); ctx.arc(x, cy - 2, 26, Math.PI * 1.1, Math.PI * 1.9); ctx.stroke();
+      ctx.fillStyle = '#10202B'; rr(x - 29, cy - 8, 8, 14, 3); ctx.fill(); rr(x + 21, cy - 8, 8, 14, 3); ctx.fill(); break;
+    case 'qa':
+      ctx.fillStyle = '#10202B'; ctx.beginPath(); ctx.arc(x, cy - 7, 21, Math.PI, 0); ctx.closePath(); ctx.fill(); ctx.stroke();
+      ctx.beginPath(); ctx.ellipse(x - a.facing * 18, cy - 7, 12, 3.5, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+      ctx.save(); ctx.translate(x + a.facing * 27, cy + 6); circ(0, -4, 7, 'rgba(160,210,230,.5)', P.out, 2.5); ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(4, 1); ctx.lineTo(9, 8); ctx.stroke(); ctx.restore(); break;
+    case 'accountant':
+      ctx.fillStyle = '#2B1B12'; ctx.beginPath(); ctx.arc(x, cy - 2, 23, Math.PI * 1.02, Math.PI * 1.98); ctx.lineTo(x + 22, cy + 4); ctx.quadraticCurveTo(x + 14, cy - 14, x, cy - 15); ctx.quadraticCurveTo(x - 14, cy - 14, x - 22, cy + 4); ctx.fill();
+      ctx.strokeStyle = '#10202B'; ctx.lineWidth = 2; [-7, 7].forEach(o => { rr(x + o + a.facing * 1.8 - 6.5, cy - 10, 13, 10, 2); ctx.stroke(); }); ctx.beginPath(); ctx.moveTo(x - .5 + a.facing * 1.8, cy - 6); ctx.lineTo(x + .5 + a.facing * 1.8, cy - 6); ctx.stroke(); break;
+    case 'legal':
+      ctx.fillStyle = '#2E2015'; ctx.beginPath(); ctx.arc(x, cy - 5, 21, Math.PI * 1.05, Math.PI * 1.95); ctx.quadraticCurveTo(x - 4, cy - 14, x - 20, cy - 10); ctx.fill(); ctx.fillStyle = 'rgba(255,255,255,.18)'; ctx.fillRect(x - 6, cy - 24, 2, 10); break;
+    case 'marketing':
+      ctx.fillStyle = '#3B1730'; ctx.beginPath(); ctx.arc(x, cy - 4, 22, Math.PI * 1.02, Math.PI * 1.98); ctx.quadraticCurveTo(x, cy - 16, x - 21, cy - 6); ctx.fill();
+      ctx.fillStyle = '#10202B'; rr(x - 15, cy - 23, 13, 7, 3); ctx.fill(); rr(x + 2, cy - 23, 13, 7, 3); ctx.fill(); ctx.fillRect(x - 3, cy - 21, 6, 2);
+      circ(x - 22, cy + 6, 2.5, '#F2A93B'); circ(x + 22, cy + 6, 2.5, '#F2A93B'); break;
+    case 'ceo':
+      ctx.fillStyle = '#B7C2C8'; ctx.beginPath(); ctx.arc(x, cy - 6, 21, Math.PI * 1.08, Math.PI * 1.92); ctx.quadraticCurveTo(x - 8, cy - 18, x - 19, cy - 13); ctx.fill(); break;
+  }
+}
+function glassesRound(a, x, cy, c){ ctx.lineWidth = 2.2; ctx.strokeStyle = c; [-7, 7].forEach(o => { ctx.beginPath(); ctx.arc(x + o + a.facing * 1.8, cy - 5, 7, 0, Math.PI * 2); ctx.stroke(); }); ctx.beginPath(); ctx.moveTo(x - .5 + a.facing * 1.8, cy - 6); ctx.lineTo(x + .5 + a.facing * 1.8, cy - 6); ctx.stroke(); }
+function nameTag(a){ txt(a.name, a.x, a.y + 12, FB(700, Math.round(12 * Math.min(uiScale, 1.5))), P.label); }
+function wrap(text, maxW){ const words = text.split(' '), lines = []; let cur = ''; for (const w of words) { const test = cur ? cur + ' ' + w : w; if (ctx.measureText(test).width > maxW && cur) { lines.push(cur); cur = w; } else cur = test; } if (cur) lines.push(cur); return lines.slice(0, 4); }
+function drawBubble(a, t){
+  const b = a.bubble, tn = now(); if (!b || b.until < tn) return;
+  const age = (tn - b.start) / 180, pop = age >= 1 ? 1 : 1 + 2.2 * Math.pow(age - 1, 3) + 1.2 * Math.pow(age - 1, 2);
+  const fade = Math.min(1, (b.until - tn) / 200);
+  const k = uiScale, fs = 13.5 * k, lh = fs * 1.25, px = 9 * k;
+  ctx.font = FB(600, fs);
+  const lines = wrap(b.text, 170 * k);
+  const bw = Math.max(...lines.map(l => ctx.measureText(l).width)) + px * 2, bh = lines.length * lh + 11 * k;
+  const jump = a.jumpUntil > tn ? Math.abs(Math.sin(t * 7 + a.seed)) * 26 : 0;
+  const tipY = a.y - jump - 74;
+  const bx = clamp(a.x - bw / 2, 4, W - bw - 4), by = Math.max(4, tipY - 9 - bh);
+  ctx.save(); ctx.globalAlpha = fade; ctx.translate(a.x, tipY); ctx.scale(pop, pop); ctx.translate(-a.x, -tipY);
+  ctx.fillStyle = 'rgba(0,0,0,.16)'; rr(bx + 2, by + 3, bw, bh, 11); ctx.fill();
+  ctx.fillStyle = '#FFFFFF'; ctx.strokeStyle = '#10202B'; ctx.lineWidth = 2; rr(bx, by, bw, bh, 11); ctx.fill(); ctx.stroke();
+  const tx = clamp(a.x, bx + 14, bx + bw - 14);
+  ctx.beginPath(); ctx.moveTo(tx - 7, by + bh - 1); ctx.lineTo(tx, by + bh + 9); ctx.lineTo(tx + 7, by + bh - 1); ctx.closePath(); ctx.fill();
+  ctx.beginPath(); ctx.moveTo(tx - 7, by + bh); ctx.lineTo(tx, by + bh + 9); ctx.lineTo(tx + 7, by + bh); ctx.stroke();
+  ctx.fillStyle = '#10202B'; ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+  lines.forEach((l, i) => ctx.fillText(l, bx + px, by + 6 * k + i * lh));
+  ctx.restore();
+}
+
+/* ---- Partículas ---- */
+const particles = [];
+function spawnConfetti(){
+  if (reduceMotion) return;
+  const cols = AG.map(a => a.color).concat(['#2DD4A7', '#FFFFFF']);
+  for (let k = 0; k < 150; k++) particles.push({ kind:'conf', x:rand(1160, 1380), y:rand(300, 360), vx:rand(-180, 180), vy:rand(-340, -140), life:3, max:3, r:rand(3, 6), c:pick(cols), rot:rand(0, 6), vr:rand(-8, 8) });
+}
+function stepParticles(dt){ for (let k = particles.length - 1; k >= 0; k--) { const p = particles[k]; p.life -= dt; if (p.life <= 0) { particles.splice(k, 1); continue; } p.x += p.vx * dt; p.y += p.vy * dt; if (p.kind === 'conf') { p.vy += 420 * dt; p.vx *= .99; p.rot += p.vr * dt; } } }
+function drawParticles(){
+  for (const p of particles) { const al = Math.max(0, p.life / p.max);
+    if (p.kind === 'conf') { ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.rot); ctx.globalAlpha = Math.min(1, al * 2); ctx.fillStyle = p.c; ctx.fillRect(-p.r / 2, -p.r / 4, p.r, p.r / 2); ctx.restore(); }
+    else if (p.kind === 'heart') { ctx.globalAlpha = al; heart(p.x, p.y, p.r, '#E8604F'); } }
+  ctx.globalAlpha = 1;
+}
+
+/* ---- Bucle ---- */
+let last = now();
+function frame(){
+  const tn = now(), dt = Math.min(.05, (tn - last) / 1000); last = tn;
+  const t = tn / 1000;
+  if (++tick % 30 === 0) readTheme();
+  for (const a of AG) {
+    idleTick(a, tn);
+    if (a.path.length) {
+      const tg = a.path[0], dx = tg.x - a.x, dy = tg.y - a.y, d = Math.hypot(dx, dy), stp = 150 * (a.carry ? 1.15 : 1) * dt;
+      if (Math.abs(dx) > .5) a.facing = dx > 0 ? 1 : -1;
+      if (d <= stp) { a.x = tg.x; a.y = tg.y; a.path.shift(); if (!a.path.length && a.arrive) { const f = a.arrive; a.arrive = null; f(true); } }
+      else { a.x += dx / d * stp; a.y += dy / d * stp; }
+      a.phase += dt * 12;
+    }
+  }
+  stepParticles(dt);
+  if (running && focus && tn - userScrolledAt > 4000) scrollToX(focus.x, false);
+  ctx.clearRect(0, 0, W, H);
+  drawWall(t); drawFloor();
+  const items = [
+    { y:280, d:() => drawRack(t) }, { y:278, d:() => drawAgua() },
+    ...DESK.map((d, i) => ({ y:d.spot.y - .5, d:() => drawChair(i) })),
+    ...DESK.map((d, i) => ({ y:d.y + d.h, d:() => drawDesk(i, t) })),
+    { y:FURN.cafe.y + FURN.cafe.h, d:() => drawCafe(t) }, { y:FURN.sofa.y + FURN.sofa.h, d:() => drawSofa() },
+    { y:FURN.ping.y + FURN.ping.h, d:() => drawPing(t) }, { y:FURN.print.y + FURN.print.h, d:() => drawPrint(t) },
+    { y:FURN.cabina.y + FURN.cabina.h, d:() => drawCabina() }, { y:FURN.mesa.y + FURN.mesa.h, d:() => drawMesa() },
+    { y:FURN.matera.y + FURN.matera.h, d:() => drawMatera() },
+    ...AG.map(a => ({ y:a.y, d:() => drawPerson(a, t) })),
+  ];
+  items.sort((p, q) => p.y - q.y).forEach(it => it.d());
+  AG.forEach(nameTag);
+  drawParticles();
+  AG.forEach(a => drawBubble(a, t));
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+
+function hit(e){ const r = canvas.getBoundingClientRect(), x = (e.clientX - r.left) * W / r.width, y = (e.clientY - r.top) * H / r.height; let best = -1, bd = 34; AG.forEach((a, i) => { const d = Math.hypot(a.x - x, a.y - 40 - y); if (d < bd) { bd = d; best = i; } }); return best; }
+canvas.addEventListener('click', e => { const i = hit(e); if (i >= 0) openChat(i); });
+canvas.addEventListener('pointermove', e => { canvas.style.cursor = hit(e) >= 0 ? 'pointer' : 'default'; });
+})();
+</script>
