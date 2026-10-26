@@ -1,0 +1,255 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum DocumentStatus {
+  READY
+  FAILED
+}
+
+enum AnalysisType {
+  SIMILARITY
+  AI_DETECTION
+}
+
+enum AnalysisStatus {
+  COMPLETED
+  FAILED
+  UNAVAILABLE
+}
+
+enum MatchKind {
+  EXACT
+  APPROXIMATE
+}
+
+enum MatchCategory {
+  QUOTE
+  REFERENCE
+  UNCLASSIFIED
+}
+
+enum SourceType {
+  USER_DOCUMENT
+  COLLECTION
+  EXTERNAL
+}
+
+model Plan {
+  id               String   @id @default(cuid())
+  name             String   @unique
+  description      String?
+  monthlyAnalyses  Int
+  maxFileSizeMb    Int
+  maxDocuments     Int
+  allowExternal    Boolean  @default(false)
+  isDefault        Boolean  @default(false)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  users            User[]
+}
+
+model User {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  name         String
+  passwordHash String
+  role         Role      @default(USER)
+  disabled     Boolean   @default(false)
+  planId       String?
+  plan         Plan?     @relation(fields: [planId], references: [id], onDelete: SetNull)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  lastLoginAt  DateTime?
+
+  sessions     Session[]
+  resetTokens  PasswordResetToken[]
+  documents    Document[]
+  analyses     Analysis[]
+  usage        UsageRecord[]
+  consents     ConsentRecord[]
+}
+
+/// El id es el hash SHA-256 del token de la cookie; el token en claro nunca se guarda.
+model Session {
+  id        String   @id
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  userAgent String?
+
+  @@index([userId])
+}
+
+model PasswordResetToken {
+  id        String    @id @default(cuid())
+  tokenHash String    @unique
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([userId])
+}
+
+model Document {
+  id             String         @id @default(cuid())
+  ownerId        String
+  owner          User           @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  title          String
+  originalName   String
+  mimeType       String
+  sizeBytes      Int
+  sha256         String
+  storageKey     String?
+  text           String         @db.Text
+  wordCount      Int
+  status         DocumentStatus @default(READY)
+  isDemo         Boolean        @default(false)
+  retentionUntil DateTime?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  analyses        Analysis[]
+  matchesAsSource SimilarityMatch[]
+
+  @@index([ownerId, createdAt])
+}
+
+model Analysis {
+  id                     String         @id @default(cuid())
+  userId                 String
+  user                   User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  documentId             String
+  document               Document       @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  type                   AnalysisType
+  status                 AnalysisStatus
+  method                 String
+  engineVersion          String
+  provider               String?
+  /// Similitud: % de palabras con coincidencias. IA: indicador del proveedor (0-100), null si no hay detector real.
+  score                  Float?
+  scoreExcludingCitations Float?
+  summary                String?        @db.Text
+  details                Json?
+  errorMessage           String?
+  createdAt              DateTime       @default(now())
+
+  matches SimilarityMatch[]
+
+  @@index([userId, createdAt])
+  @@index([documentId])
+}
+
+model SimilarityMatch {
+  id                String        @id @default(cuid())
+  analysisId        String
+  analysis          Analysis      @relation(fields: [analysisId], references: [id], onDelete: Cascade)
+  sourceType        SourceType
+  sourceDocumentId  String?
+  sourceDocument    Document?     @relation(fields: [sourceDocumentId], references: [id], onDelete: SetNull)
+  sourceCollectionDocId String?
+  sourceCollectionDoc   SourceDocument? @relation(fields: [sourceCollectionDocId], references: [id], onDelete: SetNull)
+  sourceTitle       String
+  sourceUrl         String?
+  start             Int
+  end               Int
+  matchedText       String        @db.Text
+  sourceExcerpt     String        @db.Text
+  kind              MatchKind
+  category          MatchCategory
+  similarity        Float
+  wordCount         Int
+
+  @@index([analysisId])
+}
+
+model SourceCollection {
+  id          String           @id @default(cuid())
+  name        String           @unique
+  description String?
+  isActive    Boolean          @default(true)
+  isDemo      Boolean          @default(false)
+  createdAt   DateTime         @default(now())
+  documents   SourceDocument[]
+}
+
+model SourceDocument {
+  id           String           @id @default(cuid())
+  collectionId String
+  collection   SourceCollection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+  title        String
+  author       String?
+  url          String?
+  text         String           @db.Text
+  wordCount    Int
+  createdAt    DateTime         @default(now())
+
+  matches SimilarityMatch[]
+
+  @@index([collectionId])
+}
+
+model UsageRecord {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  kind      String
+  provider  String?
+  createdAt DateTime @default(now())
+
+  @@index([userId, kind, createdAt])
+  @@index([kind, createdAt])
+}
+
+model RateLimitBucket {
+  key         String   @id
+  count       Int
+  windowStart DateTime
+}
+
+model SystemError {
+  id        String   @id @default(cuid())
+  scope     String
+  message   String   @db.Text
+  stack     String?  @db.Text
+  userId    String?
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String?
+  action    String
+  target    String?
+  meta      Json?
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+}
+
+model ConsentRecord {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  provider   String
+  purpose    String
+  documentId String?
+  createdAt  DateTime @default(now())
+
+  @@index([userId])
+}
