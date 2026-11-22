@@ -14,3 +14,13 @@ export function normalizeExtractedText(raw: string): string {
 export function countWords(text: string): number {
   return text.match(/[\p{L}\p{N}]+/gu)?.length ?? 0;
 }
+
+/**
+ * En los PDF cada renglón llega como una línea. Une los renglones que continúan la misma
+ * oración (la línea anterior no termina en puntuación final) para no partir oraciones ni párrafos.
+ */
+export function reflowPdfLines(text: string): string {
+  return text
+    .replace(/\r\n?/g, "\n")
+    .replace(/([^\n.!?:;»”")\]])[ \t]*\n(?=[ \t]*[\p{L}\p{N}(«“"¿¡])/gu, "$1 ");
+}

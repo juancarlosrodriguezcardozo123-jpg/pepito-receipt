@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { inspectZip } from "@/server/extraction/zip-guard";
-import { countWords, normalizeExtractedText } from "@/server/extraction/normalize";
+import { countWords, normalizeExtractedText, reflowPdfLines } from "@/server/extraction/normalize";
 
 function zipWithEntry(uncompressed: number): Buffer {
   // Directorio central mínimo con una entrada + EOCD.
@@ -32,5 +32,12 @@ describe("normalizeExtractedText", () => {
   });
   it("cuenta palabras con tildes y números", () => {
     expect(countWords("Año 2024: éxito, ¿sí?")).toBe(4);
+  });
+});
+
+describe("reflowPdfLines", () => {
+  it("une renglones de la misma oración y conserva los cortes tras punto final", () => {
+    const pdf = "El derecho a vivir en un ambiente sano debe entenderse\ncomo una garantía integral.\nEl Estado debe protegerlo.";
+    expect(reflowPdfLines(pdf)).toBe("El derecho a vivir en un ambiente sano debe entenderse como una garantía integral.\nEl Estado debe protegerlo.");
   });
 });

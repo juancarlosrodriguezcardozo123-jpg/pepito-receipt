@@ -3,7 +3,7 @@ import { fileTypeFromBuffer } from "file-type";
 import { env } from "@/server/env";
 import { UserFacingError } from "@/server/security/errors";
 import { inspectZip } from "./zip-guard";
-import { normalizeExtractedText } from "./normalize";
+import { normalizeExtractedText, reflowPdfLines } from "./normalize";
 
 export type SupportedKind = "pdf" | "docx" | "txt";
 
@@ -53,7 +53,7 @@ async function extractPdf(buf: Buffer): Promise<string> {
     throw new UserFacingError(`El PDF supera el máximo de ${env().MAX_PDF_PAGES} páginas.`);
   }
   const { text } = await extractText(pdf, { mergePages: false });
-  return (text as string[]).join("\n\n");
+  return (text as string[]).map(reflowPdfLines).join("\n\n");
 }
 
 async function extractDocx(buf: Buffer): Promise<string> {
